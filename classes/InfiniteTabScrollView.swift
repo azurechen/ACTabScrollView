@@ -14,6 +14,44 @@ class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
     @IBOutlet weak var tabScrollView: UIScrollView!
     @IBOutlet weak var contentScrollView: UIScrollView!
     
+    var paggingEnabled = true
+    var pageIndex: Int {
+        get {
+            var currentOffset = tabScrollView.contentOffset.x
+            var startOffset = 0 as CGFloat
+            var endOffset = (tabScrollView.contentInset.left * -1) - (pages[0].tabView.frame.size.width / 2)
+            
+            var boundLeft = 0 as CGFloat
+            var boundRight = 0 as CGFloat
+            
+            var index = 0
+            for (var i = 0; i < pages.count; i++) {
+                startOffset = endOffset
+                endOffset = startOffset + pages[i].tabView.frame.size.width
+                
+                if (i == 0) {
+                    boundLeft = startOffset
+                }
+                if (i == pages.count - 1) {
+                    boundRight = endOffset
+                }
+                
+                if (startOffset <= currentOffset && currentOffset <= endOffset) {
+                    index = i
+                }
+            }
+            
+            if (currentOffset < boundLeft) {
+                index = 0
+            }
+            if (currentOffset > boundRight) {
+                index = pages.count - 1
+            }
+            
+            return index
+        }
+    }
+    
     var pages = [Page]() {
         didSet {
             // clear all
@@ -72,23 +110,18 @@ class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     override func awakeFromNib() {
-        //tabScrollView.scrollEnabled = false
-        //tabScrollView.userInteractionEnabled = false
         tabScrollView.pagingEnabled = false
         tabScrollView.showsHorizontalScrollIndicator = false
         tabScrollView.showsVerticalScrollIndicator = false
         tabScrollView.delegate = self
         
-        //contentScrollView.scrollEnabled = false
-        //contentScrollView.userInteractionEnabled = false
-        contentScrollView.pagingEnabled = false
+        contentScrollView.pagingEnabled = paggingEnabled
         contentScrollView.showsHorizontalScrollIndicator = false
         contentScrollView.showsVerticalScrollIndicator = false
         contentScrollView.delegate = self
     }
     
     override func drawRect(rect: CGRect) {
-        
         
     }
     
@@ -100,7 +133,12 @@ class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        //draggingScrollView = nil
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if (paggingEnabled && draggingScrollView == tabScrollView) {
+            changePageTo(pageIndex, animated: true)
+        }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -116,14 +154,25 @@ class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     func scroll(offsetX: CGFloat) {
-//        var x = startContentScrollViewLocation!.x + offsetX
-//        
-//        var newFrame = CGRect(x: x, y: 0, width: contentScrollView.frame.size.width, height: contentScrollView.frame.size.height)
-//        contentScrollView.scrollRectToVisible(newFrame, animated: true)
     }
     
-    func scrollTo(index: Int, animated: Bool) {
+    func changePageTo(index: Int, animated: Bool) {
+        // force stop
+        tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
+        contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
         
+        if (index >= 0 && index < pages.count) {
+            if (draggingScrollView == tabScrollView) {
+                tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
+            }
+            if (draggingScrollView == contentScrollView) {
+                contentScrollView.scrollRectToVisible(pages[index].contentView.frame, animated: animated)
+            }
+            
+//            if (tabDelegate != nil) {
+//                self.tabDelegate!.tabScrollViewDidChange(index)
+//            }
+        }
     }
 }
 
