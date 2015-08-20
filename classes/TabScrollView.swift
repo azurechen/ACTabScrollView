@@ -17,38 +17,43 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     var paggingEnabled = true
     var pageIndex: Int {
         get {
-            var currentOffset = tabScrollView.contentOffset.x
-            var startOffset = 0 as CGFloat
-            var endOffset = (tabScrollView.contentInset.left * -1) - (pages[0].tabView.frame.size.width / 2)
-            
-            var boundLeft = 0 as CGFloat
-            var boundRight = 0 as CGFloat
-            
-            var index = 0
-            for (var i = 0; i < pages.count; i++) {
-                startOffset = endOffset
-                endOffset = startOffset + pages[i].tabView.frame.size.width
+            var index = -1
+            if (pages.count != 0) {
+                var currentOffset = tabScrollView.contentOffset.x
+                var startOffset = 0 as CGFloat
+                var endOffset = (tabScrollView.contentInset.left * -1) - (pages[0].tabView.frame.size.width / 2)
                 
-                if (i == 0) {
-                    boundLeft = startOffset
-                }
-                if (i == pages.count - 1) {
-                    boundRight = endOffset
+                var boundLeft = 0 as CGFloat
+                var boundRight = 0 as CGFloat
+                
+                for (var i = 0; i < pages.count; i++) {
+                    startOffset = endOffset
+                    endOffset = startOffset + pages[i].tabView.frame.size.width
+                    
+                    if (i == 0) {
+                        boundLeft = startOffset
+                    }
+                    if (i == pages.count - 1) {
+                        boundRight = endOffset
+                    }
+                    
+                    if (startOffset <= currentOffset && currentOffset <= endOffset) {
+                        index = i
+                    }
                 }
                 
-                if (startOffset <= currentOffset && currentOffset <= endOffset) {
-                    index = i
+                if (currentOffset < boundLeft) {
+                    index = 0
+                }
+                if (currentOffset > boundRight) {
+                    index = pages.count - 1
                 }
             }
-            
-            if (currentOffset < boundLeft) {
-                index = 0
-            }
-            if (currentOffset > boundRight) {
-                index = pages.count - 1
-            }
-            
             return index
+        }
+        set {
+            // TODO: move to new location
+            prevPageIndex = pageIndex
         }
     }
     
@@ -97,8 +102,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             var paddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
             tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
             tabScrollView.contentOffset = CGPoint(x: tabScrollView.contentInset.left * -1, y: tabScrollView.contentInset.top * -1)
+            
+            // set init index
+            pageIndex = 0
         }
     }
+    
+    var delegate: TabScrollViewDelegate?
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -143,10 +153,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        if (paggingEnabled) {
+            changePageTo(pageIndex, animated: true)
+        }
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if (paggingEnabled && activeScrollView == tabScrollView) {
+        if (paggingEnabled && !decelerate) {
             changePageTo(pageIndex, animated: true)
         }
     }
@@ -166,22 +179,24 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func scroll(offsetX: CGFloat) {
     }
     
+    var prevPageIndex = -1
     func changePageTo(index: Int, animated: Bool) {
-        // force stop
-        tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
-        contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
-        
         if (index >= 0 && index < pages.count) {
-            if (activeScrollView == tabScrollView) {
+            // force stop
+            tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
+            contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
+            
+            if (activeScrollView == nil || activeScrollView == tabScrollView) {
                 tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
             }
-            if (activeScrollView == contentScrollView) {
-                contentScrollView.scrollRectToVisible(pages[index].contentView.frame, animated: animated)
-            }
             
-//            if (tabDelegate != nil) {
-//                self.tabDelegate!.tabScrollViewDidChange(index)
-//            }
+            if (prevPageIndex != index) {
+                prevPageIndex = pageIndex
+                
+                if (delegate != nil) {
+                    self.delegate!.tabScrollViewDidPageChange(index)
+                }
+            }
         }
     }
 }
@@ -194,4 +209,10 @@ class Page {
         self.tabView = tabView
         self.contentView = contentView
     }
+}
+
+protocol TabScrollViewDelegate : NSObjectProtocol {
+    
+    func tabScrollViewDidPageChange(index: Int)
+    
 }

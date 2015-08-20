@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, TabScrollViewDelegate {
 
     var tabScrollView: TabScrollView!
     
@@ -47,7 +47,12 @@ class ViewController: UIViewController {
             pages.append(page)
         }
         tabScrollView.pages = self.pages
+        tabScrollView.delegate = self
     }
 
+    func tabScrollViewDidPageChange(index: Int) {
+        println(index)
+    }
+    
 }
 
