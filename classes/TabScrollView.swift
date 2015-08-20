@@ -92,6 +92,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             constHeightOfTabScrollView.constant = tabScrollViewContentHeight
             tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewContentHeight)
             tabScrollView.contentSize = CGSize(width: tabScrollViewContentWidth, height: tabScrollViewContentHeight)
+            tabScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabScrollViewDidClick:"))
+
             
             // set contents
             contentScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: contentScrollViewContentHeight)
@@ -143,6 +145,11 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func tabViewDidClick(sensor: UITapGestureRecognizer) {
         activeScrollView = tabScrollView
         changePageTo(sensor.view!.tag, animated: true)
+    }
+    
+    func tabScrollViewDidClick(sensor: UITapGestureRecognizer) {
+        activeScrollView = tabScrollView
+        changePageTo(pageIndex, animated: true)
     }
     
     // MARK: - Scrolling Control
