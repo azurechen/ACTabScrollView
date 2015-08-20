@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InfiniteTabScrollView: UIView {
+class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
 
     @IBOutlet weak var constHeightOfTabScrollView: NSLayoutConstraint!
     @IBOutlet weak var tabScrollView: UIScrollView!
@@ -72,22 +72,59 @@ class InfiniteTabScrollView: UIView {
     }
     
     override func awakeFromNib() {
+        //tabScrollView.scrollEnabled = false
+        //tabScrollView.userInteractionEnabled = false
         tabScrollView.pagingEnabled = false
         tabScrollView.showsHorizontalScrollIndicator = false
         tabScrollView.showsVerticalScrollIndicator = false
+        tabScrollView.delegate = self
         
+        //contentScrollView.scrollEnabled = false
+        //contentScrollView.userInteractionEnabled = false
         contentScrollView.pagingEnabled = false
         contentScrollView.showsHorizontalScrollIndicator = false
         contentScrollView.showsVerticalScrollIndicator = false
+        contentScrollView.delegate = self
     }
     
     override func drawRect(rect: CGRect) {
         
         
     }
-
     
+    // MARK: - Scrolling Control
+    var draggingScrollView: UIScrollView?
     
+    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+        draggingScrollView = scrollView
+    }
+    
+    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        draggingScrollView = nil
+    }
+    
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        if (scrollView == draggingScrollView) {
+            if (scrollView == tabScrollView) {
+                contentScrollView.contentOffset.x = (tabScrollView.contentOffset.x + tabScrollView.contentInset.left) * (contentScrollView.contentSize.width / tabScrollView.contentSize.width)
+            }
+            
+            if (scrollView == contentScrollView) {
+                tabScrollView.contentOffset.x = contentScrollView.contentOffset.x * (tabScrollView.contentSize.width / contentScrollView.contentSize.width) - tabScrollView.contentInset.left
+            }
+        }
+    }
+    
+    func scroll(offsetX: CGFloat) {
+//        var x = startContentScrollViewLocation!.x + offsetX
+//        
+//        var newFrame = CGRect(x: x, y: 0, width: contentScrollView.frame.size.width, height: contentScrollView.frame.size.height)
+//        contentScrollView.scrollRectToVisible(newFrame, animated: true)
+    }
+    
+    func scrollTo(index: Int, animated: Bool) {
+        
+    }
 }
 
 class Page {
