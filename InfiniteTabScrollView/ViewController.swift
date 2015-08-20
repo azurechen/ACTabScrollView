@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  InfiniteTabScrollView
 //
-//  Created by HTC on 2015/8/19.
+//  Created by AzureChen on 2015/8/19.
 //  Copyright (c) 2015年 AzureChen. All rights reserved.
 //
 
