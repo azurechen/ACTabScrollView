@@ -10,17 +10,17 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    var infiniteTabScrollView: InfiniteTabScrollView!
+    var tabScrollView: TabScrollView!
     
     var pages = [Page]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var infiniteTabScrollView = InfiniteTabScrollView.instanceFromNib()
-        infiniteTabScrollView.frame = self.view.frame
+        var tabScrollView = TabScrollView.instanceFromNib()
+        tabScrollView.frame = self.view.frame
         
-        self.view.addSubview(infiniteTabScrollView)
+        self.view.addSubview(tabScrollView)
 
         var tabViewSize = CGSize(width: 60, height: 60)
         var contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height - 60)
@@ -46,14 +46,8 @@ class ViewController: UIViewController {
             var page = Page(tabView: tabView, contentView: contentView)
             pages.append(page)
         }
-        infiniteTabScrollView.pages = self.pages
+        tabScrollView.pages = self.pages
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-
 
 }
 

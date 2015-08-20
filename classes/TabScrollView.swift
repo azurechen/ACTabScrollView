@@ -1,5 +1,5 @@
 //
-//  InfiniteTabScrollView.swift
+//  TabScrollView.swift
 //  InfiniteTabScrollView
 //
 //  Created by AzureChen on 2015/8/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
+class TabScrollView: UIView, UIScrollViewDelegate {
 
     @IBOutlet weak var constHeightOfTabScrollView: NSLayoutConstraint!
     @IBOutlet weak var tabScrollView: UIScrollView!
@@ -105,8 +105,8 @@ class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
         super.init(frame: frame)
     }
     
-    class func instanceFromNib() -> InfiniteTabScrollView {
-        return UINib(nibName: "InfiniteTabScrollView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! InfiniteTabScrollView
+    class func instanceFromNib() -> TabScrollView {
+        return UINib(nibName: "TabScrollView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! TabScrollView
     }
     
     override func awakeFromNib() {
