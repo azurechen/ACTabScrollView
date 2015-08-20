@@ -68,9 +68,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             var contentScrollViewContentWidth = 0 as CGFloat
             var contentScrollViewContentHeight = pages[0].contentView.frame.size.height
             
-            for page in pages {
+            for (index, page) in enumerate(pages) {
                 page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
                 page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                
+                // bind event
+                page.tabView.tag = index
+                page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
                 
                 tabScrollView.addSubview(page.tabView)
                 contentScrollView.addSubview(page.contentView)
@@ -125,24 +129,30 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         
     }
     
+    // MARK: - Tabs Click
+    func tabViewDidClick(sensor: UITapGestureRecognizer) {
+        activeScrollView = tabScrollView
+        changePageTo(sensor.view!.tag, animated: true)
+    }
+    
     // MARK: - Scrolling Control
-    var draggingScrollView: UIScrollView?
+    var activeScrollView: UIScrollView?
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        draggingScrollView = scrollView
+        activeScrollView = scrollView
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if (paggingEnabled && draggingScrollView == tabScrollView) {
+        if (paggingEnabled && activeScrollView == tabScrollView) {
             changePageTo(pageIndex, animated: true)
         }
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
-        if (scrollView == draggingScrollView) {
+        if (scrollView == activeScrollView) {
             if (scrollView == tabScrollView) {
                 contentScrollView.contentOffset.x = (tabScrollView.contentOffset.x + tabScrollView.contentInset.left) * (contentScrollView.contentSize.width / tabScrollView.contentSize.width)
             }
@@ -162,10 +172,10 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
         
         if (index >= 0 && index < pages.count) {
-            if (draggingScrollView == tabScrollView) {
+            if (activeScrollView == tabScrollView) {
                 tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
             }
-            if (draggingScrollView == contentScrollView) {
+            if (activeScrollView == contentScrollView) {
                 contentScrollView.scrollRectToVisible(pages[index].contentView.frame, animated: animated)
             }
             
