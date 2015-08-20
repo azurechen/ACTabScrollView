@@ -99,8 +99,8 @@ class InfiniteTabScrollView: UIView, UIScrollViewDelegate {
         draggingScrollView = scrollView
     }
     
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        draggingScrollView = nil
+    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+        //draggingScrollView = nil
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
