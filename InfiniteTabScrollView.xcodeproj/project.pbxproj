@@ -14,7 +14,6 @@
 		6DB0CD301B8462B90069AE39 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD2E1B8462B90069AE39 /* LaunchScreen.xib */; };
 		6DB0CD3C1B8462B90069AE39 /* InfiniteTabScrollViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD3B1B8462B90069AE39 /* InfiniteTabScrollViewTests.swift */; };
 		6DB0CD471B8464FC0069AE39 /* TabScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD461B8464FC0069AE39 /* TabScrollView.swift */; };
-		6DB0CD491B84657E0069AE39 /* TabScrollView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD481B84657E0069AE39 /* TabScrollView.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +38,6 @@
 		6DB0CD3A1B8462B90069AE39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DB0CD3B1B8462B90069AE39 /* InfiniteTabScrollViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteTabScrollViewTests.swift; sourceTree = "<group>"; };
 		6DB0CD461B8464FC0069AE39 /* TabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabScrollView.swift; sourceTree = "<group>"; };
-		6DB0CD481B84657E0069AE39 /* TabScrollView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TabScrollView.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,7 +119,6 @@
 			isa = PBXGroup;
 			children = (
 				6DB0CD461B8464FC0069AE39 /* TabScrollView.swift */,
-				6DB0CD481B84657E0069AE39 /* TabScrollView.xib */,
 			);
 			name = classes;
 			path = ../classes;
@@ -208,7 +205,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DB0CD2B1B8462B90069AE39 /* Main.storyboard in Resources */,
-				6DB0CD491B84657E0069AE39 /* TabScrollView.xib in Resources */,
 				6DB0CD301B8462B90069AE39 /* LaunchScreen.xib in Resources */,
 				6DB0CD2D1B8462B90069AE39 /* Images.xcassets in Resources */,
 			);
@@ -428,6 +424,7 @@
 				6DB0CD411B8462B90069AE39 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6DB0CD421B8462B90069AE39 /* Build configuration list for PBXNativeTarget "InfiniteTabScrollViewTests" */ = {
 			isa = XCConfigurationList;
@@ -436,6 +433,7 @@
 				6DB0CD441B8462B90069AE39 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

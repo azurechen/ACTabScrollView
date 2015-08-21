@@ -10,25 +10,24 @@ import UIKit
 
 class ViewController: UIViewController, TabScrollViewDelegate {
 
-    var tabScrollView: TabScrollView!
+    @IBOutlet weak var tabScrollView: TabScrollView!
     
     var pages = [Page]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var tabScrollView = TabScrollView.instanceFromNib()
         tabScrollView.frame = self.view.frame
         
         self.view.addSubview(tabScrollView)
 
-        var tabViewSize = CGSize(width: 60, height: 60)
-        var contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height - 60)
+        var tabViewSize = CGSize(width: 60, height: 100)
+        var contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
         for (var i = 0; i < 3; i++) {
             var tabView = UIView(frame: CGRect(x: 0, y: 0, width: tabViewSize.width, height: tabViewSize.height))
             var contentView = UIView(frame: CGRect(x: 0, y: 0, width: contentViewSize.width, height: contentViewSize.height))
             
-            switch (i) {
+            switch (i % 3) {
             case 0:
                 tabView.backgroundColor = UIColor.redColor()
                 contentView.backgroundColor = UIColor.redColor()

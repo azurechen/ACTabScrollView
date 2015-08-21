@@ -9,12 +9,17 @@
 import UIKit
 
 class TabScrollView: UIView, UIScrollViewDelegate {
-
-    @IBOutlet weak var constHeightOfTabScrollView: NSLayoutConstraint!
-    @IBOutlet weak var tabScrollView: UIScrollView!
-    @IBOutlet weak var contentScrollView: UIScrollView!
     
-    var paggingEnabled = true
+    let DEFAULT_TAB_HEIGHT: CGFloat = 60
+    
+    var tabScrollView: UIScrollView!
+    var contentScrollView: UIScrollView!
+    
+    var pagingEnabled: Bool = true {
+        didSet {
+            contentScrollView.pagingEnabled = pagingEnabled
+        }
+    }
     var pageIndex: Int {
         get {
             var index = -1
@@ -67,12 +72,19 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 subview.removeFromSuperview()
             }
             
-            // set pages
             var tabScrollViewContentWidth = 0 as CGFloat
-            var tabScrollViewContentHeight = pages[0].tabView.frame.size.height
             var contentScrollViewContentWidth = 0 as CGFloat
-            var contentScrollViewContentHeight = pages[0].contentView.frame.size.height
+            var tabScrollViewHeight = pages[0].tabView.frame.size.height
+            var contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
             
+            // set tabScrollView size
+            tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewHeight)
+            tabScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabScrollViewDidClick:"))
+
+            // set contentScrollView size
+            contentScrollView.frame = CGRect(x: 0, y: tabScrollViewHeight, width: self.frame.size.width, height: contentScrollViewHeight)            
+            
+            // set pages and content views
             for (index, page) in enumerate(pages) {
                 page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
                 page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
@@ -87,17 +99,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 tabScrollViewContentWidth += page.tabView.frame.size.width
                 contentScrollViewContentWidth += page.contentView.frame.size.width
             }
-            
-            // set tabs
-            constHeightOfTabScrollView.constant = tabScrollViewContentHeight
-            tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewContentHeight)
-            tabScrollView.contentSize = CGSize(width: tabScrollViewContentWidth, height: tabScrollViewContentHeight)
-            tabScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabScrollViewDidClick:"))
-
-            
-            // set contents
-            contentScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: contentScrollViewContentHeight)
-            contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewContentHeight)
+            tabScrollView.contentSize = CGSize(width: tabScrollViewContentWidth, height: tabScrollViewHeight)
+            contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewHeight)
             
             // set contentInset of tab
             var paddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
@@ -114,31 +117,29 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    class func instanceFromNib() -> TabScrollView {
-        return UINib(nibName: "TabScrollView", bundle: nil).instantiateWithOwner(nil, options: nil)[0] as! TabScrollView
-    }
-    
-    override func awakeFromNib() {
+        
+        // init views
+        tabScrollView = UIScrollView()
+        contentScrollView = UIScrollView()
+        self.addSubview(tabScrollView)
+        self.addSubview(contentScrollView)
+        
         tabScrollView.pagingEnabled = false
         tabScrollView.showsHorizontalScrollIndicator = false
         tabScrollView.showsVerticalScrollIndicator = false
         tabScrollView.delegate = self
         
-        contentScrollView.pagingEnabled = paggingEnabled
-        contentScrollView.showsHorizontalScrollIndicator = false
-        contentScrollView.showsVerticalScrollIndicator = false
+        contentScrollView.pagingEnabled = pagingEnabled
+        contentScrollView.showsHorizontalScrollIndicator = true
+        contentScrollView.showsVerticalScrollIndicator = true
         contentScrollView.delegate = self
     }
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
     override func drawRect(rect: CGRect) {
-        
     }
     
     // MARK: - Tabs Click
@@ -160,13 +161,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        if (paggingEnabled) {
+        if (pagingEnabled) {
             changePageTo(pageIndex, animated: true)
         }
     }
     
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if (paggingEnabled && !decelerate) {
+        if (pagingEnabled && !decelerate) {
             changePageTo(pageIndex, animated: true)
         }
     }

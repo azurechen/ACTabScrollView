@@ -15,8 +15,23 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EmM-oy-FTz" customClass="TabScrollView" customModule="InfiniteTabScrollView" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="EmM-oy-FTz" secondAttribute="bottom" id="MJQ-Qb-aNj"/>
+                            <constraint firstAttribute="trailing" secondItem="EmM-oy-FTz" secondAttribute="trailing" id="XgI-i4-mVH"/>
+                            <constraint firstItem="EmM-oy-FTz" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="icx-ce-5w1"/>
+                            <constraint firstItem="EmM-oy-FTz" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="uA2-vV-rhV"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="tabScrollView" destination="EmM-oy-FTz" id="A9y-As-Mpq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
