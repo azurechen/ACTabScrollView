@@ -21,7 +21,7 @@ class ViewController: UIViewController, TabScrollViewDelegate {
         
         self.view.addSubview(tabScrollView)
 
-        var tabViewSize = CGSize(width: 60, height: 100)
+        var tabViewSize = CGSize(width: 60, height: 60)
         var contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
         for (var i = 0; i < 3; i++) {
             var tabView = UIView(frame: CGRect(x: 0, y: 0, width: tabViewSize.width, height: tabViewSize.height))

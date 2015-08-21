@@ -158,6 +158,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         activeScrollView = scrollView
+        // stop current scrolling before start another scrolling
+        stopScrolling()
     }
     
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
@@ -170,6 +172,9 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         if (pagingEnabled && !decelerate) {
             changePageTo(pageIndex, animated: true)
         }
+    }
+    
+    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
     }
     
     func scrollViewDidScroll(scrollView: UIScrollView) {
@@ -191,8 +196,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func changePageTo(index: Int, animated: Bool) {
         if (index >= 0 && index < pages.count) {
             // force stop
-            tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
-            contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
+            stopScrolling()
             
             if (activeScrollView == nil || activeScrollView == tabScrollView) {
                 tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
@@ -206,6 +210,11 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 }
             }
         }
+    }
+    
+    func stopScrolling() {
+        tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
+        contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
     }
 }
 
