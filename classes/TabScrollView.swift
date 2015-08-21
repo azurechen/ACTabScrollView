@@ -56,9 +56,18 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             }
             return index
         }
-        set {
-            // TODO: move to new location
-            prevPageIndex = pageIndex
+        set(index) {
+            if (pages.count != 0) {
+                var tabOffsetX = 0 as CGFloat
+                var contentOffsetX = 0 as CGFloat
+                for (var i = 0; i < index; i++) {
+                    tabOffsetX += pages[index].tabView.frame.size.width
+                    contentOffsetX += pages[index].contentView.frame.size.width
+                }
+                tabScrollView.contentOffset = CGPoint(x: tabOffsetX + tabScrollView.contentInset.left * -1, y: tabScrollView.contentOffset.y)
+                contentScrollView.contentOffset = CGPoint(x: contentOffsetX, y: contentScrollView.contentOffset.y)
+            }
+            prevPageIndex = index
         }
     }
     
@@ -108,10 +117,12 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
             tabScrollView.contentOffset = CGPoint(x: tabScrollView.contentInset.left * -1, y: tabScrollView.contentInset.top * -1)
             
-            // set init index
-            pageIndex = 0
+            // reset pageIndex
+            pageIndex = defaultPage
         }
     }
+    
+    var defaultPage = 0
     
     var delegate: TabScrollViewDelegate?
     
@@ -133,6 +144,9 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         contentScrollView.showsHorizontalScrollIndicator = true
         contentScrollView.showsVerticalScrollIndicator = true
         contentScrollView.delegate = self
+        
+        // set init index
+        pageIndex = 0
     }
     
     override init(frame: CGRect) {
@@ -192,7 +206,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func scroll(offsetX: CGFloat) {
     }
     
-    var prevPageIndex = -1
+    private var prevPageIndex = -1
     func changePageTo(index: Int, animated: Bool) {
         if (index >= 0 && index < pages.count) {
             // force stop

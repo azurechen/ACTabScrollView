@@ -45,6 +45,9 @@ class ViewController: UIViewController, TabScrollViewDelegate {
             var page = Page(tabView: tabView, contentView: contentView)
             pages.append(page)
         }
+        
+        tabScrollView.defaultPage = 1
+        tabScrollView.pagingEnabled = true
         tabScrollView.pages = self.pages
         tabScrollView.delegate = self
     }
