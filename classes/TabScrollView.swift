@@ -8,9 +8,16 @@
 
 import UIKit
 
+@IBDesignable
 class TabScrollView: UIView, UIScrollViewDelegate {
     
     let DEFAULT_TAB_HEIGHT: CGFloat = 60
+    
+    @IBInspectable var contentBackground: UIColor = UIColor.grayColor() {
+        didSet {
+            contentScrollView.backgroundColor = UIColor.grayColor()
+        }
+    }
     
     var tabScrollView: UIScrollView!
     var contentScrollView: UIScrollView!
@@ -154,6 +161,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     }
     
     override func drawRect(rect: CGRect) {
+        contentScrollView.backgroundColor = contentBackground
     }
     
     // MARK: - Tabs Click
