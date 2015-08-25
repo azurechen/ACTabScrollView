@@ -13,6 +13,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     let DEFAULT_TAB_HEIGHT: CGFloat = 60
     
+    @IBInspectable var tabGradient: Bool = true
     @IBInspectable var tabBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable var mainBackgroundColor: UIColor = UIColor.grayColor()
     
@@ -68,8 +69,11 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                     tabOffsetX += pages[index].tabView.frame.size.width
                     contentOffsetX += pages[index].contentView.frame.size.width
                 }
+                // set default position of tabs and contents
                 tabScrollView.contentOffset = CGPoint(x: tabOffsetX + tabScrollView.contentInset.left * -1, y: tabScrollView.contentOffset.y)
                 contentScrollView.contentOffset = CGPoint(x: contentOffsetX, y: contentScrollView.contentOffset.y)
+                
+                resetTabs()
             }
             prevPageIndex = index
         }
@@ -95,8 +99,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         tabScrollView.delegate = self
         
         contentScrollView.pagingEnabled = pagingEnabled
-        contentScrollView.showsHorizontalScrollIndicator = true
-        contentScrollView.showsVerticalScrollIndicator = true
+        contentScrollView.showsHorizontalScrollIndicator = false
+        contentScrollView.showsVerticalScrollIndicator = false
         contentScrollView.delegate = self
         
         // set init index
@@ -111,7 +115,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         // set custom attrs
         tabScrollView.backgroundColor = tabBackgroundColor
         contentScrollView.backgroundColor = mainBackgroundColor
-
+        
         // clear all
         for subview in tabScrollView.subviews {
             subview.removeFromSuperview()
@@ -174,27 +178,32 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     // MARK: - Scrolling Control
     var activeScrollView: UIScrollView?
     
+    // scrolling animation begin by dragging
     func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         activeScrollView = scrollView
         // stop current scrolling before start another scrolling
         stopScrolling()
     }
     
+    // scrolling animation stop with decelerating
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         if (pagingEnabled) {
             changePageTo(pageIndex, animated: true)
         }
     }
     
+    // scrolling animation stop without decelerating
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (pagingEnabled && !decelerate) {
             changePageTo(pageIndex, animated: true)
         }
     }
     
+    // scrolling animation stop programmatically
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
     }
     
+    // scrolling
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if (scrollView == activeScrollView) {
             if (scrollView == tabScrollView) {
@@ -204,6 +213,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             if (scrollView == contentScrollView) {
                 tabScrollView.contentOffset.x = contentScrollView.contentOffset.x * (tabScrollView.contentSize.width / contentScrollView.contentSize.width) - tabScrollView.contentInset.left
             }
+            resetTabs()
         }
     }
     
@@ -233,6 +243,29 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func stopScrolling() {
         tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
         contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
+    }
+    
+    func resetTabs() {
+        if (tabGradient) {
+            var currentIndex = pageIndex
+            for (var i = 0; i < pages.count; i++) {
+                var alpha: CGFloat = 1.0
+                
+                var offset = abs(i - currentIndex)
+                if (offset > 1) {
+                    alpha = 0.2
+                } else if (offset > 0) {
+                    alpha = 0.4
+                } else {
+                    alpha = 1.0
+                }
+                
+                UIView.animateWithDuration(NSTimeInterval(0.5), animations: { () in
+                    self.pages[i].tabView.alpha = alpha
+                    return
+                })
+            }
+        }
     }
 }
 
