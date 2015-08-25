@@ -8,9 +8,13 @@
 
 import UIKit
 
+@IBDesignable
 class TabScrollView: UIView, UIScrollViewDelegate {
     
     let DEFAULT_TAB_HEIGHT: CGFloat = 60
+    
+    @IBInspectable var tabBackgroundColor: UIColor = UIColor.whiteColor()
+    @IBInspectable var mainBackgroundColor: UIColor = UIColor.grayColor()
     
     var tabScrollView: UIScrollView!
     var contentScrollView: UIScrollView!
@@ -104,6 +108,10 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     }
     
     override func drawRect(rect: CGRect) {
+        // set custom attrs
+        tabScrollView.backgroundColor = tabBackgroundColor
+        contentScrollView.backgroundColor = mainBackgroundColor
+
         // clear all
         for subview in tabScrollView.subviews {
             subview.removeFromSuperview()
