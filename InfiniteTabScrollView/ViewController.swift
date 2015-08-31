@@ -48,7 +48,6 @@ class ViewController: UIViewController, TabScrollViewDelegate {
         
         tabScrollView.defaultPage = 1
         tabScrollView.pagingEnabled = true
-        tabScrollView.pages = self.pages
         tabScrollView.delegate = self
     }
 
@@ -56,5 +55,12 @@ class ViewController: UIViewController, TabScrollViewDelegate {
         println(index)
     }
     
+    func pages(tabScrollView: TabScrollView) -> [Page] {
+        return self.pages
+    }
+    
+    func pageContentAtIndex(tabScrollView: TabScrollView, index: Int) -> UIView {
+        return self.pages[index].contentView
+    }
 }
 

@@ -84,10 +84,14 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    var pages = [Page]()
     var defaultPage = 0
+    var delegate: TabScrollViewDelegate? {
+        didSet {
+            pages = self.delegate!.pages(self)
+        }
+    }
     
-    var delegate: TabScrollViewDelegate?
+    private var pages = [Page]()
     
     private var isStarted = false
     private var prevScrollingIndex = -1
@@ -121,59 +125,61 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     }
     
     override func drawRect(rect: CGRect) {
-        // set custom attrs
-        tabScrollView.backgroundColor = tabBackgroundColor
-        contentScrollView.backgroundColor = mainBackgroundColor
-        
-        // clear all
-        for subview in tabScrollView.subviews {
-            subview.removeFromSuperview()
-        }
-        for subview in contentScrollView.subviews {
-            subview.removeFromSuperview()
-        }
-        
-        var tabScrollViewContentWidth = 0 as CGFloat
-        var contentScrollViewContentWidth = 0 as CGFloat
-        var tabScrollViewHeight = pages[0].tabView.frame.size.height
-        var contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
-        
-        // set tabScrollView size
-        tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewHeight)
-        tabScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabScrollViewDidClick:"))
-        
-        // set contentScrollView size
-        contentScrollView.frame = CGRect(x: 0, y: tabScrollViewHeight, width: self.frame.size.width, height: contentScrollViewHeight)
-        
-        // set pages and content views
-        for (index, page) in enumerate(pages) {
-            page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
-            page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+        if (pages.count > 0) {
+            // set custom attrs
+            tabScrollView.backgroundColor = tabBackgroundColor
+            contentScrollView.backgroundColor = mainBackgroundColor
             
-            // bind event
-            page.tabView.tag = index
-            page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
+            // clear all
+            for subview in tabScrollView.subviews {
+                subview.removeFromSuperview()
+            }
+            for subview in contentScrollView.subviews {
+                subview.removeFromSuperview()
+            }
             
-            tabScrollView.addSubview(page.tabView)
-            contentScrollView.addSubview(page.contentView)
+            var tabScrollViewContentWidth = 0 as CGFloat
+            var contentScrollViewContentWidth = 0 as CGFloat
+            var tabScrollViewHeight = pages[0].tabView.frame.size.height
+            var contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
             
-            tabScrollViewContentWidth += page.tabView.frame.size.width
-            contentScrollViewContentWidth += page.contentView.frame.size.width
-        }
-        tabScrollView.contentSize = CGSize(width: tabScrollViewContentWidth, height: tabScrollViewHeight)
-        contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewHeight)
-        
-        // set contentInset of tab
-        var paddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
-        var paddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
-        tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
-        
-        // first time
-        if (!isStarted) {
-            isStarted = true
+            // set tabScrollView size
+            tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewHeight)
+            tabScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabScrollViewDidClick:"))
             
-            // reset pageIndex
-            pageIndex = defaultPage
+            // set contentScrollView size
+            contentScrollView.frame = CGRect(x: 0, y: tabScrollViewHeight, width: self.frame.size.width, height: contentScrollViewHeight)
+            
+            // set pages and content views
+            for (index, page) in enumerate(pages) {
+                page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
+                page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                
+                // bind event
+                page.tabView.tag = index
+                page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
+                
+                tabScrollView.addSubview(page.tabView)
+                contentScrollView.addSubview(page.contentView)
+                
+                tabScrollViewContentWidth += page.tabView.frame.size.width
+                contentScrollViewContentWidth += page.contentView.frame.size.width
+            }
+            tabScrollView.contentSize = CGSize(width: tabScrollViewContentWidth, height: tabScrollViewHeight)
+            contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewHeight)
+            
+            // set contentInset of tab
+            var paddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
+            var paddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
+            tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
+            
+            // first time
+            if (!isStarted) {
+                isStarted = true
+                
+                // reset pageIndex
+                pageIndex = defaultPage
+            }
         }
     }
     
@@ -306,5 +312,9 @@ class Page {
     
     // triggered by scrolling through any pages
     optional func tabScrollViewDidScrollPage(index: Int)
+    
+    func pages(tabScrollView: TabScrollView) -> [Page]
+    
+    func pageContentAtIndex(tabScrollView: TabScrollView, index: Int) -> UIView
     
 }
