@@ -52,7 +52,7 @@ class ViewController: UIViewController, TabScrollViewDelegate {
         tabScrollView.delegate = self
     }
 
-    func tabScrollViewDidPageChange(index: Int) {
+    func tabScrollViewDidChangePage(index: Int) {
         println(index)
     }
     

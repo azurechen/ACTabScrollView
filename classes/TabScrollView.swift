@@ -89,6 +89,10 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     var delegate: TabScrollViewDelegate?
     
+    private var isStarted = false
+    private var prevScrollingIndex = -1
+    private var prevPageIndex = -1
+    
     required init(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -163,7 +167,9 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         var paddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
         var paddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
         tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
-        tabScrollView.contentOffset = CGPoint(x: tabScrollView.contentInset.left * -1, y: tabScrollView.contentInset.top * -1)
+        
+        // start
+        isStarted = true
         
         // reset pageIndex
         pageIndex = defaultPage
@@ -220,12 +226,19 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             }
             resetTabs()
         }
+        
+        if (isStarted && prevScrollingIndex != pageIndex) {
+            prevScrollingIndex = pageIndex
+            
+            if (delegate != nil) {
+                self.delegate!.tabScrollViewDidScrollPage?(pageIndex)
+            }
+        }
     }
     
     func scroll(offsetX: CGFloat) {
     }
     
-    private var prevPageIndex = -1
     func changePageTo(index: Int, animated: Bool) {
         if (index >= 0 && index < pages.count) {
             // force stop
@@ -239,7 +252,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 prevPageIndex = pageIndex
                 
                 if (delegate != nil) {
-                    self.delegate!.tabScrollViewDidPageChange(index)
+                    self.delegate!.tabScrollViewDidChangePage(index)
                 }
             }
         }
@@ -284,8 +297,12 @@ class Page {
     }
 }
 
-protocol TabScrollViewDelegate : NSObjectProtocol {
+@objc protocol TabScrollViewDelegate : NSObjectProtocol {
     
-    func tabScrollViewDidPageChange(index: Int)
+    // triggered by stopping at particular page
+    func tabScrollViewDidChangePage(index: Int)
+    
+    // triggered by scrolling through any pages
+    optional func tabScrollViewDidScrollPage(index: Int)
     
 }
