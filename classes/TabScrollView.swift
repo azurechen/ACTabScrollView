@@ -21,6 +21,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     @IBInspectable var tabGradient: Bool = true
     @IBInspectable var tabBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable var mainBackgroundColor: UIColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.9)
+    @IBInspectable var cachePageLimit: Int = 3
     
     var tabScrollView: UIScrollView!
     var contentScrollView: UIScrollView!
@@ -153,14 +154,17 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             // set pages and content views
             for (index, page) in enumerate(pages) {
                 page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
-                //page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
-                
                 // bind event
                 page.tabView.tag = index
                 page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
                 
                 tabScrollView.addSubview(page.tabView)
-                //contentScrollView.addSubview(page.contentView)
+                
+                // without lazy loading
+                if (cachePageLimit <= 0) {
+                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                    contentScrollView.addSubview(page.contentView)
+                }
                 
                 tabScrollViewContentWidth += page.tabView.frame.size.width
                 contentScrollViewContentWidth += page.contentView.frame.size.width
@@ -236,28 +240,33 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         }
         
         if (isStarted && prevScrollingIndex != pageIndex) {
-            // lazy load content
-            var leftBoundIndex = pageIndex - 1 > 0 ? pageIndex - 1 : 0
-            var rightBoundIndex = pageIndex + 1 < pages.count ? pageIndex + 1 : pages.count - 1
-            
-            var contentScrollViewContentWidth: CGFloat = 0.0
-            
-            for (var i = 0; i < self.pages.count; i++) {
-                var page = self.pages[i]
+            // lazy loading
+            if (cachePageLimit > 0) {
+                var offset = Int(cachePageLimit / 2)
+                var leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
+                var rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
                 
-                // add
-                if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
-                    page.isLoaded = true
-                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
-                    contentScrollView.addSubview(page.contentView)
-                }
-                // remove
-                if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
-                    page.isLoaded = false
-                    page.contentView.removeFromSuperview()
-                }
+                var contentScrollViewContentWidth: CGFloat = 0.0
                 
-                contentScrollViewContentWidth += page.contentView.frame.size.width
+                for (var i = 0; i < self.pages.count; i++) {
+                    var page = self.pages[i]
+                    
+                    // add
+                    if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
+                        println("Add")
+                        page.isLoaded = true
+                        page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                        contentScrollView.addSubview(page.contentView)
+                    }
+                    // remove
+                    if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
+                        println("Remove")
+                        page.isLoaded = false
+                        page.contentView.removeFromSuperview()
+                    }
+                    
+                    contentScrollViewContentWidth += page.contentView.frame.size.width
+                }
             }
             
             prevScrollingIndex = pageIndex
