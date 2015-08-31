@@ -179,10 +179,11 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             
             // first time
             if (!isStarted) {
-                isStarted = true
-                
                 // reset pageIndex
                 pageIndex = defaultPage
+                
+                isStarted = true
+                lazyLoadPages()
             }
         }
     }
@@ -241,33 +242,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         
         if (isStarted && prevScrollingIndex != pageIndex) {
             // lazy loading
-            if (cachePageLimit > 0) {
-                var offset = Int(cachePageLimit / 2)
-                var leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
-                var rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
-                
-                var contentScrollViewContentWidth: CGFloat = 0.0
-                
-                for (var i = 0; i < self.pages.count; i++) {
-                    var page = self.pages[i]
-                    
-                    // add
-                    if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
-                        println("Add")
-                        page.isLoaded = true
-                        page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
-                        contentScrollView.addSubview(page.contentView)
-                    }
-                    // remove
-                    if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
-                        println("Remove")
-                        page.isLoaded = false
-                        page.contentView.removeFromSuperview()
-                    }
-                    
-                    contentScrollViewContentWidth += page.contentView.frame.size.width
-                }
-            }
+            lazyLoadPages()
             
             prevScrollingIndex = pageIndex
             // callback
@@ -304,7 +279,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
     }
     
-    func resetTabs() {
+    private func resetTabs() {
         if (tabGradient) {
             var currentIndex = pageIndex
             for (var i = 0; i < pages.count; i++) {
@@ -323,6 +298,34 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                     self.pages[i].tabView.alpha = alpha
                     return
                 })
+            }
+        }
+    }
+    
+    private func lazyLoadPages() {
+        if (cachePageLimit > 0) {
+            var offset = Int(cachePageLimit / 2)
+            var leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
+            var rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
+            
+            var contentScrollViewContentWidth: CGFloat = 0.0
+            
+            for (var i = 0; i < self.pages.count; i++) {
+                var page = self.pages[i]
+                
+                // add
+                if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
+                    page.isLoaded = true
+                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                    contentScrollView.addSubview(page.contentView)
+                }
+                // remove
+                if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
+                    page.isLoaded = false
+                    page.contentView.removeFromSuperview()
+                }
+                
+                contentScrollViewContentWidth += page.contentView.frame.size.width
             }
         }
     }
