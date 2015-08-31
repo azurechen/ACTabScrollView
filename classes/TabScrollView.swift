@@ -257,7 +257,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             }
             
             if (prevPageIndex != index) {
-                prevPageIndex = pageIndex
+                prevPageIndex = index
                 
                 if (delegate != nil) {
                     self.delegate!.tabScrollViewDidChangePage(index)
