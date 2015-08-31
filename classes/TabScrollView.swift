@@ -6,6 +6,11 @@
 //  Copyright (c) 2015 AzureChen. All rights reserved.
 //
 
+//  TODO:
+//   1. Add a method that can be called when developer need to resize UI on viewDidAppear
+//   2. Infinite Scrolling
+//   3. Performace improvment
+
 import UIKit
 
 @IBDesignable
