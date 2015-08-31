@@ -168,11 +168,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         var paddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
         tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
         
-        // start
-        isStarted = true
-        
-        // reset pageIndex
-        pageIndex = defaultPage
+        // first time
+        if (!isStarted) {
+            isStarted = true
+            
+            // reset pageIndex
+            pageIndex = defaultPage
+        }
     }
     
     // MARK: - Tabs Click
