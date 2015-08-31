@@ -20,7 +20,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     @IBInspectable var tabGradient: Bool = true
     @IBInspectable var tabBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable var mainBackgroundColor: UIColor = UIColor.grayColor()
+    @IBInspectable var mainBackgroundColor: UIColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.9)
     
     var tabScrollView: UIScrollView!
     var contentScrollView: UIScrollView!
@@ -138,8 +138,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 subview.removeFromSuperview()
             }
             
-            var tabScrollViewContentWidth = 0 as CGFloat
-            var contentScrollViewContentWidth = 0 as CGFloat
+            var tabScrollViewContentWidth: CGFloat = 0
+            var contentScrollViewContentWidth: CGFloat = 0
             var tabScrollViewHeight = pages[0].tabView.frame.size.height
             var contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
             
@@ -153,14 +153,14 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             // set pages and content views
             for (index, page) in enumerate(pages) {
                 page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
-                page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                //page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
                 
                 // bind event
                 page.tabView.tag = index
                 page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
                 
                 tabScrollView.addSubview(page.tabView)
-                contentScrollView.addSubview(page.contentView)
+                //contentScrollView.addSubview(page.contentView)
                 
                 tabScrollViewContentWidth += page.tabView.frame.size.width
                 contentScrollViewContentWidth += page.contentView.frame.size.width
@@ -236,8 +236,32 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         }
         
         if (isStarted && prevScrollingIndex != pageIndex) {
-            prevScrollingIndex = pageIndex
+            // lazy load content
+            var leftBoundIndex = pageIndex - 1 > 0 ? pageIndex - 1 : 0
+            var rightBoundIndex = pageIndex + 1 < pages.count ? pageIndex + 1 : pages.count - 1
             
+            var contentScrollViewContentWidth: CGFloat = 0.0
+            
+            for (var i = 0; i < self.pages.count; i++) {
+                var page = self.pages[i]
+                
+                // add
+                if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
+                    page.isLoaded = true
+                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                    contentScrollView.addSubview(page.contentView)
+                }
+                // remove
+                if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
+                    page.isLoaded = false
+                    page.contentView.removeFromSuperview()
+                }
+                
+                contentScrollViewContentWidth += page.contentView.frame.size.width
+            }
+            
+            prevScrollingIndex = pageIndex
+            // callback
             if (delegate != nil) {
                 self.delegate!.tabScrollViewDidScrollPage?(pageIndex)
             }
@@ -258,7 +282,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             
             if (prevPageIndex != index) {
                 prevPageIndex = index
-                
+                // callback
                 if (delegate != nil) {
                     self.delegate!.tabScrollViewDidChangePage(index)
                 }
@@ -298,6 +322,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
 class Page {
     var tabView: UIView
     var contentView: UIView
+    var isLoaded = false
     
     init(tabView: UIView, contentView: UIView) {
         self.tabView = tabView
@@ -313,8 +338,10 @@ class Page {
     // triggered by scrolling through any pages
     optional func tabScrollViewDidScrollPage(index: Int)
     
+    // get pages
     func pages(tabScrollView: TabScrollView) -> [Page]
     
+    // get content view at particular page
     func pageContentAtIndex(tabScrollView: TabScrollView, index: Int) -> UIView
     
 }
