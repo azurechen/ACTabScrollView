@@ -157,7 +157,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             
             // set pages and content views
             for (index, page) in enumerate(pages) {
-                page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: page.tabView.frame.size.height)
+                page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: tabScrollView.frame.size.height)
                 // bind event
                 page.tabView.tag = index
                 page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
@@ -166,7 +166,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 
                 // without lazy loading
                 if (cachePageLimit <= 0) {
-                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height)
                     contentScrollView.addSubview(page.contentView)
                 }
                 
@@ -320,7 +320,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 // add
                 if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
                     page.isLoaded = true
-                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: page.contentView.frame.size.height)
+                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height)
                     contentScrollView.addSubview(page.contentView)
                 }
                 // remove
