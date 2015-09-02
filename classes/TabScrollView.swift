@@ -9,7 +9,8 @@
 //  TODO:
 //   1. Add a method that can be called when developer need to resize UI on viewDidAppear
 //   2. Infinite Scrolling
-//   3. Performace improvment
+//   3. Performace improvement
+//   4. Adjust the scrolling offset if tabs have diffent widths
 
 import UIKit
 
@@ -138,6 +139,9 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             for subview in contentScrollView.subviews {
                 subview.removeFromSuperview()
             }
+            for page in pages {
+                page.isLoaded = false
+            }
             
             var tabScrollViewContentWidth: CGFloat = 0
             var contentScrollViewContentWidth: CGFloat = 0
@@ -183,8 +187,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 pageIndex = defaultPage
                 
                 isStarted = true
-                lazyLoadPages()
             }
+            lazyLoadPages()
         }
     }
     
