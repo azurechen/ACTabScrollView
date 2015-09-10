@@ -11,6 +11,7 @@
 //   2. Infinite Scrolling
 //   3. Performace improvement
 //   4. Adjust the scrolling offset if tabs have diffent widths
+//   5. Add paging support if the size of page.contentViews are smaller than tabScrollView size
 
 import UIKit
 
@@ -78,7 +79,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                 }
                 // set default position of tabs and contents
                 tabScrollView.contentOffset = CGPoint(x: tabOffsetX + tabScrollView.contentInset.left * -1, y: tabScrollView.contentOffset.y)
-                contentScrollView.contentOffset = CGPoint(x: contentOffsetX, y: contentScrollView.contentOffset.y)
+                contentScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentScrollView.contentInset.left * -1, y: contentScrollView.contentOffset.y)
                 
                 resetTabs()
             }
@@ -177,9 +178,14 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewHeight)
             
             // set contentInset of tab
-            var paddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
-            var paddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
-            tabScrollView.contentInset = UIEdgeInsets(top: 0, left: paddingLeft, bottom: 0, right: paddingRight)
+            var tabPaddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
+            var tabPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
+            tabScrollView.contentInset = UIEdgeInsets(top: 0, left: tabPaddingLeft, bottom: 0, right: tabPaddingRight)
+            
+            // set contentInset of content
+            var contentPaddingLeft = (self.frame.size.width / 2) - (pages[0].contentView.frame.size.width / 2)
+            var contentPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].contentView.frame.size.width / 2)
+            contentScrollView.contentInset = UIEdgeInsets(top: 0, left: contentPaddingLeft, bottom: 0, right: contentPaddingRight)
             
             // first time
             if (!isStarted) {
@@ -235,11 +241,11 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if (scrollView == activeScrollView) {
             if (scrollView == tabScrollView) {
-                contentScrollView.contentOffset.x = (tabScrollView.contentOffset.x + tabScrollView.contentInset.left) * (contentScrollView.contentSize.width / tabScrollView.contentSize.width)
+                contentScrollView.contentOffset.x = (tabScrollView.contentOffset.x + tabScrollView.contentInset.left) * (contentScrollView.contentSize.width / tabScrollView.contentSize.width) - contentScrollView.contentInset.left
             }
             
             if (scrollView == contentScrollView) {
-                tabScrollView.contentOffset.x = contentScrollView.contentOffset.x * (tabScrollView.contentSize.width / contentScrollView.contentSize.width) - tabScrollView.contentInset.left
+                tabScrollView.contentOffset.x = (contentScrollView.contentOffset.x + contentScrollView.contentInset.left) * (tabScrollView.contentSize.width / contentScrollView.contentSize.width) - tabScrollView.contentInset.left
             }
             resetTabs()
         }
