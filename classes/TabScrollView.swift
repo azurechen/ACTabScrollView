@@ -221,14 +221,12 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation stop with decelerating
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        if (pagingEnabled) {
-            changePageTo(pageIndex, animated: true)
-        }
+        changePageTo(pageIndex, animated: true)
     }
     
     // scrolling animation stop without decelerating
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        if (pagingEnabled && !decelerate) {
+        if (!decelerate) {
             changePageTo(pageIndex, animated: true)
         }
     }
@@ -267,11 +265,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     func changePageTo(index: Int, animated: Bool) {
         if (index >= 0 && index < pages.count) {
-            // force stop
-            stopScrolling()
-            
-            if (activeScrollView == nil || activeScrollView == tabScrollView) {
-                tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
+            if (pagingEnabled) {
+                // force stop
+                stopScrolling()
+                
+                if (activeScrollView == nil || activeScrollView == tabScrollView) {
+                    tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
+                }
             }
             
             if (prevPageIndex != index) {
