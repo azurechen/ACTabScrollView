@@ -168,6 +168,8 @@
 		6DB0CD181B8462B90069AE39 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0700;
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = AzureChen;
 				TargetAttributes = {

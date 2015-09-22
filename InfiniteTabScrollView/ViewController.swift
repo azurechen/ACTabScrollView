@@ -21,11 +21,11 @@ class ViewController: UIViewController, TabScrollViewDelegate {
         
         self.view.addSubview(tabScrollView)
 
-        var tabViewSize = CGSize(width: 60, height: 60)
-        var contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height - tabViewSize.height)
+        let tabViewSize = CGSize(width: 60, height: 60)
+        let contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height - tabViewSize.height)
         for (var i = 0; i < 3; i++) {
-            var tabView = UIView(frame: CGRect(x: 0, y: 0, width: tabViewSize.width, height: tabViewSize.height))
-            var contentView = UIView(frame: CGRect(x: 0, y: 0, width: contentViewSize.width, height: contentViewSize.height))
+            let tabView = UIView(frame: CGRect(x: 0, y: 0, width: tabViewSize.width, height: tabViewSize.height))
+            let contentView = UIView(frame: CGRect(x: 0, y: 0, width: contentViewSize.width, height: contentViewSize.height))
             
             switch (i % 3) {
             case 0:
@@ -42,7 +42,7 @@ class ViewController: UIViewController, TabScrollViewDelegate {
             }
             
             
-            var page = Page(tabView: tabView, contentView: contentView)
+            let page = Page(tabView: tabView, contentView: contentView)
             pages.append(page)
         }
         
@@ -52,8 +52,10 @@ class ViewController: UIViewController, TabScrollViewDelegate {
     }
 
     func tabScrollViewDidChangePage(index: Int) {
-        println(index)
+        print(index)
     }
+    
+    func tabScrollViewDidScrollPage(index: Int) {}
     
     func pages(tabScrollView: TabScrollView) -> [Page] {
         return self.pages

@@ -37,7 +37,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         get {
             var index = -1
             if (pages.count != 0) {
-                var currentOffset = tabScrollView.contentOffset.x
+                let currentOffset = tabScrollView.contentOffset.x
                 var startOffset = 0 as CGFloat
                 var endOffset = (tabScrollView.contentInset.left * -1) - (pages[0].tabView.frame.size.width / 2)
                 
@@ -100,7 +100,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     private var prevScrollingIndex = -1
     private var prevPageIndex = -1
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         // init views
@@ -146,8 +146,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             
             var tabScrollViewContentWidth: CGFloat = 0
             var contentScrollViewContentWidth: CGFloat = 0
-            var tabScrollViewHeight = pages[0].tabView.frame.size.height
-            var contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
+            let tabScrollViewHeight = pages[0].tabView.frame.size.height
+            let contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
             
             // set tabScrollView size
             tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewHeight)
@@ -157,7 +157,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             contentScrollView.frame = CGRect(x: 0, y: tabScrollViewHeight, width: self.frame.size.width, height: contentScrollViewHeight)
             
             // set pages and content views
-            for (index, page) in enumerate(pages) {
+            for (index, page) in pages.enumerate() {
                 page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: tabScrollView.frame.size.height)
                 // bind event
                 page.tabView.tag = index
@@ -178,13 +178,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewHeight)
             
             // set contentInset of tab
-            var tabPaddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
-            var tabPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
+            let tabPaddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
+            let tabPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
             tabScrollView.contentInset = UIEdgeInsets(top: 0, left: tabPaddingLeft, bottom: 0, right: tabPaddingRight)
             
             // set contentInset of content
-            var contentPaddingLeft = (self.frame.size.width / 2) - (pages[0].contentView.frame.size.width / 2)
-            var contentPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].contentView.frame.size.width / 2)
+            let contentPaddingLeft = (self.frame.size.width / 2) - (pages[0].contentView.frame.size.width / 2)
+            let contentPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].contentView.frame.size.width / 2)
             contentScrollView.contentInset = UIEdgeInsets(top: 0, left: contentPaddingLeft, bottom: 0, right: contentPaddingRight)
             
             // first time
@@ -255,7 +255,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             prevScrollingIndex = pageIndex
             // callback
             if (delegate != nil) {
-                self.delegate!.tabScrollViewDidScrollPage?(pageIndex)
+                self.delegate!.tabScrollViewDidScrollPage(pageIndex)
             }
         }
     }
@@ -291,11 +291,11 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     private func resetTabs() {
         if (tabGradient) {
-            var currentIndex = pageIndex
+            let currentIndex = pageIndex
             for (var i = 0; i < pages.count; i++) {
                 var alpha: CGFloat = 1.0
                 
-                var offset = abs(i - currentIndex)
+                let offset = abs(i - currentIndex)
                 if (offset > 1) {
                     alpha = 0.2
                 } else if (offset > 0) {
@@ -314,14 +314,14 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     private func lazyLoadPages() {
         if (cachePageLimit > 0) {
-            var offset = Int(cachePageLimit / 2)
-            var leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
-            var rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
+            let offset = Int(cachePageLimit / 2)
+            let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
+            let rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
             
             var contentScrollViewContentWidth: CGFloat = 0.0
             
             for (var i = 0; i < self.pages.count; i++) {
-                var page = self.pages[i]
+                let page = self.pages[i]
                 
                 // add
                 if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
@@ -352,13 +352,13 @@ class Page {
     }
 }
 
-@objc protocol TabScrollViewDelegate : NSObjectProtocol {
+protocol TabScrollViewDelegate : NSObjectProtocol {
     
     // triggered by stopping at particular page
     func tabScrollViewDidChangePage(index: Int)
     
     // triggered by scrolling through any pages
-    optional func tabScrollViewDidScrollPage(index: Int)
+    func tabScrollViewDidScrollPage(index: Int)
     
     // get pages
     func pages(tabScrollView: TabScrollView) -> [Page]
