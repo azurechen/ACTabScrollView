@@ -22,7 +22,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     @IBInspectable var tabGradient: Bool = true
     @IBInspectable var tabBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable var mainBackgroundColor: UIColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 0.9)
+    @IBInspectable var mainBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable var cachePageLimit: Int = 3
     
     var tabScrollView: UIScrollView!
@@ -312,6 +312,42 @@ class TabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
+    func prepareOtherPages() {
+        if (cachePageLimit > 0) {
+            let offset = Int(cachePageLimit / 2)
+            let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
+            let rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
+            
+            
+            var contentScrollViewContentWidth: CGFloat = 0.0
+            for (var i = 0; i < self.pages.count; i++) {
+                let page = self.pages[i]
+                
+                if (!page.isPrepared && (i < leftBoundIndex || i > rightBoundIndex)) {
+                    insertPage(page, frame: CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height))
+                }
+                
+                contentScrollViewContentWidth += page.contentView.frame.size.width
+            }
+        }
+    }
+    
+    func recycle() {
+        if (cachePageLimit > 0) {
+            let offset = Int(cachePageLimit / 2)
+            let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
+            let rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
+            
+            for (var i = 0; i < self.pages.count; i++) {
+                let page = self.pages[i]
+                
+                if (page.isPrepared && (i < leftBoundIndex || i > rightBoundIndex)) {
+                    self.removePage(page)
+                }
+            }
+        }
+    }
+    
     private func lazyLoadPages() {
         if (cachePageLimit > 0) {
             let offset = Int(cachePageLimit / 2)
@@ -319,31 +355,40 @@ class TabScrollView: UIView, UIScrollViewDelegate {
             let rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
             
             var contentScrollViewContentWidth: CGFloat = 0.0
-            
             for (var i = 0; i < self.pages.count; i++) {
                 let page = self.pages[i]
                 
                 // add
                 if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
-                    page.isLoaded = true
-                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height)
-                    contentScrollView.addSubview(page.contentView)
+                    insertPage(page, frame: CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height))
                 }
                 // remove
                 if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
-                    page.isLoaded = false
-                    page.contentView.removeFromSuperview()
+                    removePage(page)
                 }
                 
                 contentScrollViewContentWidth += page.contentView.frame.size.width
             }
         }
     }
+    
+    private func insertPage(page: Page, frame: CGRect) {
+        page.isLoaded = true
+        page.isPrepared = true
+        page.contentView.frame = frame
+        contentScrollView.addSubview(page.contentView)
+    }
+    
+    private func removePage(page: Page) {
+        page.isLoaded = false
+        page.contentView.removeFromSuperview()
+    }
 }
 
 class Page {
     var tabView: UIView
     var contentView: UIView
+    var isPrepared = false
     var isLoaded = false
     
     init(tabView: UIView, contentView: UIView) {
