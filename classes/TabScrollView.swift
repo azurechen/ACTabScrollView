@@ -201,12 +201,12 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     // MARK: - Tabs Click
     func tabViewDidClick(sensor: UITapGestureRecognizer) {
         activeScrollView = tabScrollView
-        changePageTo(sensor.view!.tag, animated: true)
+        moveToIndex(sensor.view!.tag, animated: true)
     }
     
     func tabScrollViewDidClick(sensor: UITapGestureRecognizer) {
         activeScrollView = tabScrollView
-        changePageTo(pageIndex, animated: true)
+        moveToIndex(pageIndex, animated: true)
     }
     
     // MARK: - Scrolling Control
@@ -221,13 +221,13 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation stop with decelerating
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        changePageTo(pageIndex, animated: true)
+        moveToIndex(pageIndex, animated: true)
     }
     
     // scrolling animation stop without decelerating
     func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
-            changePageTo(pageIndex, animated: true)
+            moveToIndex(pageIndex, animated: true)
         }
     }
     
@@ -263,25 +263,9 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func scroll(offsetX: CGFloat) {
     }
     
-    func changePageTo(index: Int, animated: Bool) {
-        if (index >= 0 && index < pages.count) {
-            if (pagingEnabled) {
-                // force stop
-                stopScrolling()
-                
-                if (activeScrollView == nil || activeScrollView == tabScrollView) {
-                    tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
-                }
-            }
-            
-            if (prevPageIndex != index) {
-                prevPageIndex = index
-                // callback
-                if (delegate != nil) {
-                    self.delegate!.tabScrollViewDidChangePage(index)
-                }
-            }
-        }
+    func changePageToIndex(index: Int, animated: Bool) {
+        activeScrollView = tabScrollView
+        moveToIndex(index, animated: animated)
     }
     
     func stopScrolling() {
@@ -308,6 +292,27 @@ class TabScrollView: UIView, UIScrollViewDelegate {
                     self.pages[i].tabView.alpha = alpha
                     return
                 })
+            }
+        }
+    }
+    
+    private func moveToIndex(index: Int, animated: Bool) {
+        if (index >= 0 && index < pages.count) {
+            if (pagingEnabled) {
+                // force stop
+                stopScrolling()
+                
+                if (activeScrollView == nil || activeScrollView == tabScrollView) {
+                    tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
+                }
+            }
+            
+            if (prevPageIndex != index) {
+                prevPageIndex = index
+                // callback
+                if (delegate != nil) {
+                    self.delegate!.tabScrollViewDidChangePage(index)
+                }
             }
         }
     }
