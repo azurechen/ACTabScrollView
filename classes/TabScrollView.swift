@@ -100,6 +100,9 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     private var prevScrollingIndex = -1
     private var prevPageIndex = -1
     
+    private var changePageWaitForCallback = false
+    private var changePageCallback: ((Void) -> (Void))?
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -233,6 +236,10 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation stop programmatically
     func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+        if (changePageWaitForCallback) {
+            changePageWaitForCallback = false
+            changePageCallback?()
+        }
     }
     
     // scrolling
@@ -266,6 +273,12 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     func changePageToIndex(index: Int, animated: Bool) {
         activeScrollView = tabScrollView
         moveToIndex(index, animated: animated)
+    }
+    
+    func changePageToIndex(index: Int, animated: Bool, withCallback callback: (Void) -> Void) {
+        changePageWaitForCallback = true
+        changePageCallback = callback
+        changePageToIndex(index, animated: animated)
     }
     
     func stopScrolling() {
