@@ -1,6 +1,6 @@
 //
-//  InfiniteTabScrollViewTests.swift
-//  InfiniteTabScrollViewTests
+//  ACTabScrollViewTests.swift
+//  ACTabScrollViewTests
 //
 //  Created by AzureChen on 2015/8/19.
 //  Copyright (c) 2015年 AzureChen. All rights reserved.
@@ -9,7 +9,7 @@
 import UIKit
 import XCTest
 
-class InfiniteTabScrollViewTests: XCTestCase {
+class ACTabScrollViewTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

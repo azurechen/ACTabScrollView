@@ -1,6 +1,6 @@
 //
 //  TabScrollView.swift
-//  InfiniteTabScrollView
+//  ACTabScrollView
 //
 //  Created by AzureChen on 2015/8/19.
 //  Copyright (c) 2015 AzureChen. All rights reserved.

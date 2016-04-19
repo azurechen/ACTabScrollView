@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:InfiniteTabScrollView.xcodeproj">
+      location = "self:/Users/Azure_Chen/Code/XcodeProjects/ACTabScrollView/ACTabScrollView.xcodeproj">
    </FileRef>
 </Workspace>
