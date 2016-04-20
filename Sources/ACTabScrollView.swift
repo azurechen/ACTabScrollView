@@ -1,5 +1,5 @@
 //
-//  TabScrollView.swift
+//  ACTabScrollView.swift
 //  ACTabScrollView
 //
 //  Created by AzureChen on 2015/8/19.
@@ -16,13 +16,13 @@
 import UIKit
 
 @IBDesignable
-class TabScrollView: UIView, UIScrollViewDelegate {
+class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     let DEFAULT_TAB_HEIGHT: CGFloat = 60
     
     @IBInspectable var tabGradient: Bool = true
-    @IBInspectable var tabBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable var mainBackgroundColor: UIColor = UIColor.whiteColor()
+    @IBInspectable var tabSectionBackgroundColor: UIColor = UIColor.whiteColor()
+    @IBInspectable var pageSectionBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable var cachePageLimit: Int = 3
     
     var tabScrollView: UIScrollView!
@@ -88,7 +88,7 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     }
     
     var defaultPage = 0
-    var delegate: TabScrollViewDelegate? {
+    var delegate: ACTabScrollViewDelegate? {
         didSet {
             pages = self.delegate!.pages(self)
         }
@@ -133,8 +133,8 @@ class TabScrollView: UIView, UIScrollViewDelegate {
     override func drawRect(rect: CGRect) {
         if (pages.count > 0) {
             // set custom attrs
-            tabScrollView.backgroundColor = tabBackgroundColor
-            contentScrollView.backgroundColor = mainBackgroundColor
+            tabScrollView.backgroundColor = tabSectionBackgroundColor
+            contentScrollView.backgroundColor = pageSectionBackgroundColor
             
             // clear all
             for subview in tabScrollView.subviews {
@@ -415,7 +415,7 @@ class Page {
     }
 }
 
-protocol TabScrollViewDelegate : NSObjectProtocol {
+protocol ACTabScrollViewDelegate : NSObjectProtocol {
     
     // triggered by stopping at particular page
     func tabScrollViewDidChangePage(index: Int)
@@ -424,9 +424,9 @@ protocol TabScrollViewDelegate : NSObjectProtocol {
     func tabScrollViewDidScrollPage(index: Int)
     
     // get pages
-    func pages(tabScrollView: TabScrollView) -> [Page]
+    func pages(tabScrollView: ACTabScrollView) -> [Page]
     
     // get content view at particular page
-    func pageContentAtIndex(tabScrollView: TabScrollView, index: Int) -> UIView
+    func pageContentAtIndex(tabScrollView: ACTabScrollView, index: Int) -> UIView
     
 }

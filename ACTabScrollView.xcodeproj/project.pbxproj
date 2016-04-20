@@ -13,7 +13,7 @@
 		6DB0CD2D1B8462B90069AE39 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD2C1B8462B90069AE39 /* Images.xcassets */; };
 		6DB0CD301B8462B90069AE39 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD2E1B8462B90069AE39 /* LaunchScreen.xib */; };
 		6DB0CD3C1B8462B90069AE39 /* ACTabScrollViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD3B1B8462B90069AE39 /* ACTabScrollViewTests.swift */; };
-		6DB0CD471B8464FC0069AE39 /* TabScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD461B8464FC0069AE39 /* TabScrollView.swift */; };
+		6DB0CD471B8464FC0069AE39 /* ACTabScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD461B8464FC0069AE39 /* ACTabScrollView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +37,7 @@
 		6DB0CD351B8462B90069AE39 /* ACTabScrollView.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ACTabScrollView.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB0CD3A1B8462B90069AE39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DB0CD3B1B8462B90069AE39 /* ACTabScrollViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACTabScrollViewTests.swift; sourceTree = "<group>"; };
-		6DB0CD461B8464FC0069AE39 /* TabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabScrollView.swift; sourceTree = "<group>"; };
+		6DB0CD461B8464FC0069AE39 /* ACTabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -118,7 +118,7 @@
 		6DB0CD451B8464700069AE39 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				6DB0CD461B8464FC0069AE39 /* TabScrollView.swift */,
+				6DB0CD461B8464FC0069AE39 /* ACTabScrollView.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -226,7 +226,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6DB0CD281B8462B90069AE39 /* ViewController.swift in Sources */,
-				6DB0CD471B8464FC0069AE39 /* TabScrollView.swift in Sources */,
+				6DB0CD471B8464FC0069AE39 /* ACTabScrollView.swift in Sources */,
 				6DB0CD261B8462B90069AE39 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -8,9 +8,9 @@
 
 import UIKit
 
-class ViewController: UIViewController, TabScrollViewDelegate {
+class ViewController: UIViewController, ACTabScrollViewDelegate {
 
-    @IBOutlet weak var tabScrollView: TabScrollView!
+    @IBOutlet weak var tabScrollView: ACTabScrollView!
     
     var pages = [Page]()
     
@@ -57,11 +57,11 @@ class ViewController: UIViewController, TabScrollViewDelegate {
     
     func tabScrollViewDidScrollPage(index: Int) {}
     
-    func pages(tabScrollView: TabScrollView) -> [Page] {
+    func pages(tabScrollView: ACTabScrollView) -> [Page] {
         return self.pages
     }
     
-    func pageContentAtIndex(tabScrollView: TabScrollView, index: Int) -> UIView {
+    func pageContentAtIndex(tabScrollView: ACTabScrollView, index: Int) -> UIView {
         return self.pages[index].contentView
     }
 }
