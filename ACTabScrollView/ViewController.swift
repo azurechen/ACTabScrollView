@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController, ACTabScrollViewDelegate {
+class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource {
 
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     
@@ -49,13 +49,14 @@ class ViewController: UIViewController, ACTabScrollViewDelegate {
         tabScrollView.defaultPage = 1
         tabScrollView.pagingEnabled = true
         tabScrollView.delegate = self
+        tabScrollView.dataSource = self
     }
 
-    func tabScrollViewDidChangePage(index: Int) {
+    func tabScrollView(tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
         print(index)
     }
     
-    func tabScrollViewDidScrollPage(index: Int) {}
+    func tabScrollView(tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {}
     
     func pages(tabScrollView: ACTabScrollView) -> [Page] {
         return self.pages

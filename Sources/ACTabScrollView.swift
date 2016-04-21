@@ -16,7 +16,7 @@
 import UIKit
 
 @IBDesignable
-class ACTabScrollView: UIView, UIScrollViewDelegate {
+public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     private let DEFAULT_TAB_HEIGHT: CGFloat = 60
     
@@ -32,9 +32,10 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     @IBInspectable var defaultPage = 0
     
-    var delegate: ACTabScrollViewDelegate? {
+    var delegate: ACTabScrollViewDelegate?
+    var dataSource: ACTabScrollViewDataSource? {
         didSet {
-            pages = self.delegate!.pages(self)
+            pages = self.dataSource!.pages(self)
         }
     }
     
@@ -104,7 +105,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var changePageWaitForCallback = false
     private var changePageCallback: ((Void) -> (Void))?
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
         // init views
@@ -131,7 +132,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
         super.init(frame: frame)
     }
     
-    override func drawRect(rect: CGRect) {
+    override public func drawRect(rect: CGRect) {
         if (pages.count > 0) {
             // set custom attrs
             tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
@@ -217,26 +218,26 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     var activeScrollView: UIScrollView?
     
     // scrolling animation begin by dragging
-    func scrollViewWillBeginDragging(scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
         activeScrollView = scrollView
         // stop current scrolling before start another scrolling
         stopScrolling()
     }
     
     // scrolling animation stop with decelerating
-    func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         moveToIndex(pageIndex, animated: true)
     }
     
     // scrolling animation stop without decelerating
-    func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
             moveToIndex(pageIndex, animated: true)
         }
     }
     
     // scrolling animation stop programmatically
-    func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
+    public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
         if (changePageWaitForCallback) {
             changePageWaitForCallback = false
             changePageCallback?()
@@ -244,7 +245,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // scrolling
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    public func scrollViewDidScroll(scrollView: UIScrollView) {
         if (scrollView == activeScrollView) {
             if (scrollView == tabSectionScrollView) {
                 contentSectionScrollView.contentOffset.x = (tabSectionScrollView.contentOffset.x + tabSectionScrollView.contentInset.left) * (contentSectionScrollView.contentSize.width / tabSectionScrollView.contentSize.width) - contentSectionScrollView.contentInset.left
@@ -263,7 +264,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
             prevScrollingIndex = pageIndex
             // callback
             if (delegate != nil) {
-                self.delegate!.tabScrollViewDidScrollPage(pageIndex)
+                self.delegate!.tabScrollView(self, didScrollPageTo: pageIndex)
             }
         }
     }
@@ -325,7 +326,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
                 prevPageIndex = index
                 // callback
                 if (delegate != nil) {
-                    self.delegate!.tabScrollViewDidChangePage(index)
+                    self.delegate!.tabScrollView(self, didChangePageTo: index)
                 }
             }
         }
@@ -404,7 +405,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
 }
 
-class Page {
+public class Page {
     var tabView: UIView
     var contentView: UIView
     var isPrepared = false
@@ -414,20 +415,4 @@ class Page {
         self.tabView = tabView
         self.contentView = contentView
     }
-}
-
-protocol ACTabScrollViewDelegate : NSObjectProtocol {
-    
-    // triggered by stopping at particular page
-    func tabScrollViewDidChangePage(index: Int)
-    
-    // triggered by scrolling through any pages
-    func tabScrollViewDidScrollPage(index: Int)
-    
-    // get pages
-    func pages(tabScrollView: ACTabScrollView) -> [Page]
-    
-    // get content view at particular page
-    func pageContentAtIndex(tabScrollView: ACTabScrollView, index: Int) -> UIView
-    
 }

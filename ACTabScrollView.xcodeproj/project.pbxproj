@@ -14,6 +14,7 @@
 		6DB0CD301B8462B90069AE39 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD2E1B8462B90069AE39 /* LaunchScreen.xib */; };
 		6DB0CD3C1B8462B90069AE39 /* ACTabScrollViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD3B1B8462B90069AE39 /* ACTabScrollViewTests.swift */; };
 		6DB0CD471B8464FC0069AE39 /* ACTabScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD461B8464FC0069AE39 /* ACTabScrollView.swift */; };
+		98A418CC1CC8BE3700718CA2 /* ACTabScrollView+Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98A418CB1CC8BE3700718CA2 /* ACTabScrollView+Protocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +39,7 @@
 		6DB0CD3A1B8462B90069AE39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DB0CD3B1B8462B90069AE39 /* ACTabScrollViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ACTabScrollViewTests.swift; sourceTree = "<group>"; };
 		6DB0CD461B8464FC0069AE39 /* ACTabScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ACTabScrollView.swift; sourceTree = "<group>"; };
+		98A418CB1CC8BE3700718CA2 /* ACTabScrollView+Protocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ACTabScrollView+Protocol.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 			isa = PBXGroup;
 			children = (
 				6DB0CD461B8464FC0069AE39 /* ACTabScrollView.swift */,
+				98A418CB1CC8BE3700718CA2 /* ACTabScrollView+Protocol.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -225,6 +228,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				98A418CC1CC8BE3700718CA2 /* ACTabScrollView+Protocol.swift in Sources */,
 				6DB0CD281B8462B90069AE39 /* ViewController.swift in Sources */,
 				6DB0CD471B8464FC0069AE39 /* ACTabScrollView.swift in Sources */,
 				6DB0CD261B8462B90069AE39 /* AppDelegate.swift in Sources */,
