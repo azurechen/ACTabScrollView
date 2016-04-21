@@ -11,35 +11,43 @@
 //   2. Infinite Scrolling
 //   3. Performace improvement
 //   4. Adjust the scrolling offset if tabs have diffent widths
-//   5. Add paging support if the size of page.contentViews are smaller than tabScrollView size
+//   5. Add paging support if the size of page.contentViews are smaller than tabSectionScrollView size
 
 import UIKit
 
 @IBDesignable
 class ACTabScrollView: UIView, UIScrollViewDelegate {
     
-    let DEFAULT_TAB_HEIGHT: CGFloat = 60
+    private let DEFAULT_TAB_HEIGHT: CGFloat = 60
     
+    // public variables
     @IBInspectable var tabGradient: Bool = true
     @IBInspectable var tabSectionBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable var pageSectionBackgroundColor: UIColor = UIColor.whiteColor()
+    @IBInspectable var contentSectionBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable var cachePageLimit: Int = 3
-    
-    var tabScrollView: UIScrollView!
-    var contentScrollView: UIScrollView!
-    
-    var pagingEnabled: Bool = true {
+    @IBInspectable var pagingEnabled: Bool = true {
         didSet {
-            contentScrollView.pagingEnabled = pagingEnabled
+            contentSectionScrollView.pagingEnabled = pagingEnabled
         }
     }
-    var pageIndex: Int {
+    @IBInspectable var defaultPage = 0
+    
+    var delegate: ACTabScrollViewDelegate? {
+        didSet {
+            pages = self.delegate!.pages(self)
+        }
+    }
+    
+    private var tabSectionScrollView: UIScrollView!
+    private var contentSectionScrollView: UIScrollView!
+    
+    private var pageIndex: Int {
         get {
             var index = -1
             if (pages.count != 0) {
-                let currentOffset = tabScrollView.contentOffset.x
+                let currentOffset = tabSectionScrollView.contentOffset.x
                 var startOffset = 0 as CGFloat
-                var endOffset = (tabScrollView.contentInset.left * -1) - (pages[0].tabView.frame.size.width / 2)
+                var endOffset = (tabSectionScrollView.contentInset.left * -1) - (pages[0].tabView.frame.size.width / 2)
                 
                 var boundLeft = 0 as CGFloat
                 var boundRight = 0 as CGFloat
@@ -78,19 +86,12 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
                     contentOffsetX += pages[index].contentView.frame.size.width
                 }
                 // set default position of tabs and contents
-                tabScrollView.contentOffset = CGPoint(x: tabOffsetX + tabScrollView.contentInset.left * -1, y: tabScrollView.contentOffset.y)
-                contentScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentScrollView.contentInset.left * -1, y: contentScrollView.contentOffset.y)
+                tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
+                contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
                 
                 resetTabs()
             }
             prevPageIndex = index
-        }
-    }
-    
-    var defaultPage = 0
-    var delegate: ACTabScrollViewDelegate? {
-        didSet {
-            pages = self.delegate!.pages(self)
         }
     }
     
@@ -107,20 +108,20 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
         super.init(coder: aDecoder)
         
         // init views
-        tabScrollView = UIScrollView()
-        contentScrollView = UIScrollView()
-        self.addSubview(tabScrollView)
-        self.addSubview(contentScrollView)
+        tabSectionScrollView = UIScrollView()
+        contentSectionScrollView = UIScrollView()
+        self.addSubview(tabSectionScrollView)
+        self.addSubview(contentSectionScrollView)
         
-        tabScrollView.pagingEnabled = false
-        tabScrollView.showsHorizontalScrollIndicator = false
-        tabScrollView.showsVerticalScrollIndicator = false
-        tabScrollView.delegate = self
+        tabSectionScrollView.pagingEnabled = false
+        tabSectionScrollView.showsHorizontalScrollIndicator = false
+        tabSectionScrollView.showsVerticalScrollIndicator = false
+        tabSectionScrollView.delegate = self
         
-        contentScrollView.pagingEnabled = pagingEnabled
-        contentScrollView.showsHorizontalScrollIndicator = false
-        contentScrollView.showsVerticalScrollIndicator = false
-        contentScrollView.delegate = self
+        contentSectionScrollView.pagingEnabled = pagingEnabled
+        contentSectionScrollView.showsHorizontalScrollIndicator = false
+        contentSectionScrollView.showsVerticalScrollIndicator = false
+        contentSectionScrollView.delegate = self
         
         // set init index
         pageIndex = 0
@@ -133,62 +134,62 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     override func drawRect(rect: CGRect) {
         if (pages.count > 0) {
             // set custom attrs
-            tabScrollView.backgroundColor = tabSectionBackgroundColor
-            contentScrollView.backgroundColor = pageSectionBackgroundColor
+            tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
+            contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
             
             // clear all
-            for subview in tabScrollView.subviews {
+            for subview in tabSectionScrollView.subviews {
                 subview.removeFromSuperview()
             }
-            for subview in contentScrollView.subviews {
+            for subview in contentSectionScrollView.subviews {
                 subview.removeFromSuperview()
             }
             for page in pages {
                 page.isLoaded = false
             }
             
-            var tabScrollViewContentWidth: CGFloat = 0
-            var contentScrollViewContentWidth: CGFloat = 0
-            let tabScrollViewHeight = pages[0].tabView.frame.size.height
-            let contentScrollViewHeight = self.frame.size.height - tabScrollViewHeight
+            var tabSectionScrollViewContentWidth: CGFloat = 0
+            var contentSectionScrollViewContentWidth: CGFloat = 0
+            let tabSectionScrollViewHeight = pages[0].tabView.frame.size.height
+            let contentSectionScrollViewHeight = self.frame.size.height - tabSectionScrollViewHeight
             
-            // set tabScrollView size
-            tabScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabScrollViewHeight)
-            tabScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabScrollViewDidClick:"))
+            // set tabSectionScrollView size
+            tabSectionScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabSectionScrollViewHeight)
+            tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
             
-            // set contentScrollView size
-            contentScrollView.frame = CGRect(x: 0, y: tabScrollViewHeight, width: self.frame.size.width, height: contentScrollViewHeight)
+            // set contentSectionScrollView size
+            contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionScrollViewHeight, width: self.frame.size.width, height: contentSectionScrollViewHeight)
             
             // set pages and content views
             for (index, page) in pages.enumerate() {
-                page.tabView.frame = CGRect(x: tabScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: tabScrollView.frame.size.height)
+                page.tabView.frame = CGRect(x: tabSectionScrollViewContentWidth, y: 0, width: page.tabView.frame.size.width, height: tabSectionScrollView.frame.size.height)
                 // bind event
                 page.tabView.tag = index
                 page.tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
                 
-                tabScrollView.addSubview(page.tabView)
+                tabSectionScrollView.addSubview(page.tabView)
                 
                 // without lazy loading
                 if (cachePageLimit <= 0) {
-                    page.contentView.frame = CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height)
-                    contentScrollView.addSubview(page.contentView)
+                    page.contentView.frame = CGRect(x: contentSectionScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentSectionScrollView.frame.size.height)
+                    contentSectionScrollView.addSubview(page.contentView)
                 }
                 
-                tabScrollViewContentWidth += page.tabView.frame.size.width
-                contentScrollViewContentWidth += page.contentView.frame.size.width
+                tabSectionScrollViewContentWidth += page.tabView.frame.size.width
+                contentSectionScrollViewContentWidth += page.contentView.frame.size.width
             }
-            tabScrollView.contentSize = CGSize(width: tabScrollViewContentWidth, height: tabScrollViewHeight)
-            contentScrollView.contentSize = CGSize(width: contentScrollViewContentWidth, height: contentScrollViewHeight)
+            tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionScrollViewHeight)
+            contentSectionScrollView.contentSize = CGSize(width: contentSectionScrollViewContentWidth, height: contentSectionScrollViewHeight)
             
             // set contentInset of tab
             let tabPaddingLeft = (self.frame.size.width / 2) - (pages[0].tabView.frame.size.width / 2)
             let tabPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].tabView.frame.size.width / 2)
-            tabScrollView.contentInset = UIEdgeInsets(top: 0, left: tabPaddingLeft, bottom: 0, right: tabPaddingRight)
+            tabSectionScrollView.contentInset = UIEdgeInsets(top: 0, left: tabPaddingLeft, bottom: 0, right: tabPaddingRight)
             
             // set contentInset of content
             let contentPaddingLeft = (self.frame.size.width / 2) - (pages[0].contentView.frame.size.width / 2)
             let contentPaddingRight = (self.frame.size.width / 2) - (pages[pages.count - 1].contentView.frame.size.width / 2)
-            contentScrollView.contentInset = UIEdgeInsets(top: 0, left: contentPaddingLeft, bottom: 0, right: contentPaddingRight)
+            contentSectionScrollView.contentInset = UIEdgeInsets(top: 0, left: contentPaddingLeft, bottom: 0, right: contentPaddingRight)
             
             // first time
             if (!isStarted) {
@@ -203,12 +204,12 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // MARK: - Tabs Click
     func tabViewDidClick(sensor: UITapGestureRecognizer) {
-        activeScrollView = tabScrollView
+        activeScrollView = tabSectionScrollView
         moveToIndex(sensor.view!.tag, animated: true)
     }
     
-    func tabScrollViewDidClick(sensor: UITapGestureRecognizer) {
-        activeScrollView = tabScrollView
+    func tabSectionScrollViewDidClick(sensor: UITapGestureRecognizer) {
+        activeScrollView = tabSectionScrollView
         moveToIndex(pageIndex, animated: true)
     }
     
@@ -245,12 +246,12 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     // scrolling
     func scrollViewDidScroll(scrollView: UIScrollView) {
         if (scrollView == activeScrollView) {
-            if (scrollView == tabScrollView) {
-                contentScrollView.contentOffset.x = (tabScrollView.contentOffset.x + tabScrollView.contentInset.left) * (contentScrollView.contentSize.width / tabScrollView.contentSize.width) - contentScrollView.contentInset.left
+            if (scrollView == tabSectionScrollView) {
+                contentSectionScrollView.contentOffset.x = (tabSectionScrollView.contentOffset.x + tabSectionScrollView.contentInset.left) * (contentSectionScrollView.contentSize.width / tabSectionScrollView.contentSize.width) - contentSectionScrollView.contentInset.left
             }
             
-            if (scrollView == contentScrollView) {
-                tabScrollView.contentOffset.x = (contentScrollView.contentOffset.x + contentScrollView.contentInset.left) * (tabScrollView.contentSize.width / contentScrollView.contentSize.width) - tabScrollView.contentInset.left
+            if (scrollView == contentSectionScrollView) {
+                tabSectionScrollView.contentOffset.x = (contentSectionScrollView.contentOffset.x + contentSectionScrollView.contentInset.left) * (tabSectionScrollView.contentSize.width / contentSectionScrollView.contentSize.width) - tabSectionScrollView.contentInset.left
             }
             resetTabs()
         }
@@ -271,7 +272,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     func changePageToIndex(index: Int, animated: Bool) {
-        activeScrollView = tabScrollView
+        activeScrollView = tabSectionScrollView
         moveToIndex(index, animated: animated)
     }
     
@@ -282,8 +283,8 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     func stopScrolling() {
-        tabScrollView.setContentOffset(tabScrollView.contentOffset, animated: false)
-        contentScrollView.setContentOffset(contentScrollView.contentOffset, animated: false)
+        tabSectionScrollView.setContentOffset(tabSectionScrollView.contentOffset, animated: false)
+        contentSectionScrollView.setContentOffset(contentSectionScrollView.contentOffset, animated: false)
     }
     
     private func resetTabs() {
@@ -315,8 +316,8 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
                 // force stop
                 stopScrolling()
                 
-                if (activeScrollView == nil || activeScrollView == tabScrollView) {
-                    tabScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
+                if (activeScrollView == nil || activeScrollView == tabSectionScrollView) {
+                    tabSectionScrollView.scrollRectToVisible(pages[index].tabView.frame, animated: animated)
                 }
             }
             
@@ -337,15 +338,15 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
             let rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
             
             
-            var contentScrollViewContentWidth: CGFloat = 0.0
+            var contentSectionScrollViewContentWidth: CGFloat = 0.0
             for (var i = 0; i < self.pages.count; i++) {
                 let page = self.pages[i]
                 
                 if (!page.isPrepared && (i < leftBoundIndex || i > rightBoundIndex)) {
-                    insertPage(page, frame: CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height))
+                    insertPage(page, frame: CGRect(x: contentSectionScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentSectionScrollView.frame.size.height))
                 }
                 
-                contentScrollViewContentWidth += page.contentView.frame.size.width
+                contentSectionScrollViewContentWidth += page.contentView.frame.size.width
             }
         }
     }
@@ -372,20 +373,20 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
             let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
             let rightBoundIndex = pageIndex + offset < pages.count ? pageIndex + offset : pages.count - 1
             
-            var contentScrollViewContentWidth: CGFloat = 0.0
+            var contentSectionScrollViewContentWidth: CGFloat = 0.0
             for (var i = 0; i < self.pages.count; i++) {
                 let page = self.pages[i]
                 
                 // add
                 if (i >= leftBoundIndex && i <= rightBoundIndex && !page.isLoaded) {
-                    insertPage(page, frame: CGRect(x: contentScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentScrollView.frame.size.height))
+                    insertPage(page, frame: CGRect(x: contentSectionScrollViewContentWidth, y: 0, width: page.contentView.frame.size.width, height: contentSectionScrollView.frame.size.height))
                 }
                 // remove
                 if ((i < leftBoundIndex || i > rightBoundIndex) && page.isLoaded) {
                     removePage(page)
                 }
                 
-                contentScrollViewContentWidth += page.contentView.frame.size.width
+                contentSectionScrollViewContentWidth += page.contentView.frame.size.width
             }
         }
     }
@@ -394,7 +395,7 @@ class ACTabScrollView: UIView, UIScrollViewDelegate {
         page.isLoaded = true
         page.isPrepared = true
         page.contentView.frame = frame
-        contentScrollView.addSubview(page.contentView)
+        contentSectionScrollView.addSubview(page.contentView)
     }
     
     private func removePage(page: Page) {
