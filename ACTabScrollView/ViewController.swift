@@ -12,39 +12,11 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
 
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     
-    var pages = [Page]()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         tabScrollView.frame = self.view.frame
-        
         self.view.addSubview(tabScrollView)
-
-        let tabViewSize = CGSize(width: 60, height: 60)
-        let contentViewSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height - tabViewSize.height)
-        for (var i = 0; i < 3; i++) {
-            let tabView = UIView(frame: CGRect(x: 0, y: 0, width: tabViewSize.width, height: tabViewSize.height))
-            let contentView = UIView(frame: CGRect(x: 0, y: 0, width: contentViewSize.width, height: contentViewSize.height))
-            
-            switch (i % 3) {
-            case 0:
-                tabView.backgroundColor = UIColor.redColor()
-                contentView.backgroundColor = UIColor.redColor()
-            case 1:
-                tabView.backgroundColor = UIColor.greenColor()
-                contentView.backgroundColor = UIColor.greenColor()
-            case 2:
-                tabView.backgroundColor = UIColor.blueColor()
-                contentView.backgroundColor = UIColor.blueColor()
-            default:
-                break
-            }
-            
-            
-            let page = Page(tabView: tabView, contentView: contentView)
-            pages.append(page)
-        }
         
         tabScrollView.defaultPage = 1
         tabScrollView.pagingEnabled = true
@@ -56,14 +28,57 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
         print(index)
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {}
-    
-    func pages(tabScrollView: ACTabScrollView) -> [Page] {
-        return self.pages
+    func tabScrollView(tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
     }
     
-    func pageContentAtIndex(tabScrollView: ACTabScrollView, index: Int) -> UIView {
-        return self.pages[index].contentView
+    func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int {
+        return 3
+    }
+    
+    func heightForTabInTabScrollView(tabScrollView: ACTabScrollView) -> CGFloat {
+        return 60
+    }
+    
+    func tabScrollView(tabScrollView: ACTabScrollView, widthForTabAtIndex index: Int) -> CGFloat {
+        return 60
+    }
+    
+    func tabScrollView(tabScrollView: ACTabScrollView, tabForPageAtIndex index: Int) -> UIView {
+        let tabView = UIView()
+        
+        switch (index % 3) {
+        case 0:
+            tabView.backgroundColor = UIColor.redColor()
+        case 1:
+            tabView.backgroundColor = UIColor.greenColor()
+        case 2:
+            tabView.backgroundColor = UIColor.blueColor()
+        default:
+            break
+        }
+        
+        return tabView
+    }
+    
+    func tabScrollView(tabScrollView: ACTabScrollView, widthForContentAtIndex index: Int) -> CGFloat {
+        return self.view.frame.size.width
+    }
+    
+    func tabScrollView(tabScrollView: ACTabScrollView, contentForPageAtIndex index: Int) -> UIView {
+        let contentView = UIView()
+        
+        switch (index % 3) {
+        case 0:
+            contentView.backgroundColor = UIColor.redColor()
+        case 1:
+            contentView.backgroundColor = UIColor.greenColor()
+        case 2:
+            contentView.backgroundColor = UIColor.blueColor()
+        default:
+            break
+        }
+        
+        return contentView
     }
 }
 
