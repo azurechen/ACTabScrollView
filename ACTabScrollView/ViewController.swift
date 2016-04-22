@@ -22,6 +22,7 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
         tabScrollView.pagingEnabled = true
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
+        tabScrollView.cachePageLimit = 3
     }
 
     func tabScrollView(tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
@@ -32,7 +33,7 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
     }
     
     func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int {
-        return 3
+        return 8
     }
     
     func heightForTabInTabScrollView(tabScrollView: ACTabScrollView) -> CGFloat {

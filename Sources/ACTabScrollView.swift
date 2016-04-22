@@ -38,7 +38,21 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var tabSectionScrollView: UIScrollView!
     private var contentSectionScrollView: UIScrollView!
     private var cachedPageTabs: [Int: UIView] = [:]
-    private var cachedPageContents: [Int: UIView] = [:]
+    private var cachedPageContents: [Int: UIView] = [:] {
+        didSet {
+            var limit = 3
+            if (cachePageLimit > 3) {
+                limit = cachePageLimit
+            } else if (cachePageLimit < 1 && dataSource != nil) {
+                limit = dataSource!.numberOfPagesInTabScrollView(self)
+            }
+            if (cachedPageContents.count > limit) {
+                let (_, view) = cachedPageContents.popFirst()!
+                view.removeFromSuperview()
+            }
+            print("limit: \(limit) ,size: \(cachedPageContents.count)")
+        }
+    }
     
     private var pageIndex: Int {
         get {
@@ -423,7 +437,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private func lazyLoadPages() {
         if (dataSource != nil && dataSource!.numberOfPagesInTabScrollView(self) != 0) {
             let count = dataSource!.numberOfPagesInTabScrollView(self)
-            let offset = Int(cachePageLimit / 2)
+            let offset = 1
             let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
             let rightBoundIndex = pageIndex + offset < count ? pageIndex + offset : count - 1
             
@@ -437,8 +451,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                         width: width,
                         height: contentSectionScrollView.frame.size.height)
                     insertPageAtIndex(i, frame: frame)
-                } else if (i < leftBoundIndex || i > rightBoundIndex) {
-                    removePageAtIndex(i)
                 }
                 
                 currentContentWidth += width
@@ -450,14 +462,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         if (cachedPageContents[index] == nil) {
             let view = dataSource!.tabScrollView(self, contentForPageAtIndex: index)
             view.frame = frame
+            cachedPageContents.removeValueForKey(index)
             cachedPageContents[index] = view
             contentSectionScrollView.addSubview(view)
-        }
-    }
-    
-    private func removePageAtIndex(index: Int) {
-        if let view = cachedPageContents[index] {
-            view.removeFromSuperview()
         }
     }
 }
