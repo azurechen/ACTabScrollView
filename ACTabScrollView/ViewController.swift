@@ -23,8 +23,10 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
         tabScrollView.cachePageLimit = 3
+        tabScrollView.defaultTabHeight = 60
     }
-
+    
+    // MARK: ACTabScrollViewDelegate
     func tabScrollView(tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
         print(index)
     }
@@ -32,19 +34,16 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
     func tabScrollView(tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
     }
     
+    // MARK: ACTabScrollViewDataSource
     func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int {
         return 8
-    }
-    
-    func heightForTabInTabScrollView(tabScrollView: ACTabScrollView) -> CGFloat {
-        return 60
     }
     
     func tabScrollView(tabScrollView: ACTabScrollView, widthForTabAtIndex index: Int) -> CGFloat {
         return 60
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, tabForPageAtIndex index: Int) -> UIView {
+    func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         let tabView = UIView()
         
         switch (index % 3) {
@@ -61,11 +60,7 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
         return tabView
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, widthForContentAtIndex index: Int) -> CGFloat {
-        return self.view.frame.size.width
-    }
-    
-    func tabScrollView(tabScrollView: ACTabScrollView, contentForPageAtIndex index: Int) -> UIView {
+    func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
         let contentView = UIView()
         
         switch (index % 3) {

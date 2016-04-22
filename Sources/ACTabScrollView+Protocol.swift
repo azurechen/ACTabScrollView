@@ -2,7 +2,7 @@
 //  ACTabScrollView+Protocol.swift
 //  ACTabScrollView
 //
-//  Created by Azure_Chen on 2016/4/21.
+//  Created by AzureChen on 2016/4/21.
 //  Copyright © 2016年 AzureChen. All rights reserved.
 //
 
@@ -19,27 +19,15 @@ public protocol ACTabScrollViewDelegate {
 
 public protocol ACTabScrollViewDataSource {
     
-//    // get pages
-//    func pages(tabScrollView: ACTabScrollView) -> [Page]
-//    
-//    // get content view at particular page
-//    func pageContentAtIndex(tabScrollView: ACTabScrollView, index: Int) -> UIView
-    
     // get pages count
     func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int
-    
-    // get the height of tab at index
-    func heightForTabInTabScrollView(tabScrollView: ACTabScrollView) -> CGFloat
     
     // get the width of tab at index
     func tabScrollView(tabScrollView: ACTabScrollView, widthForTabAtIndex index: Int) -> CGFloat
     
     // get the tab at index
-    func tabScrollView(tabScrollView: ACTabScrollView, tabForPageAtIndex index: Int) -> UIView
-    
-    // get the width of content at index
-    func tabScrollView(tabScrollView: ACTabScrollView, widthForContentAtIndex index: Int) -> CGFloat
+    func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView
     
     // get the content at index
-    func tabScrollView(tabScrollView: ACTabScrollView, contentForPageAtIndex index: Int) -> UIView
+    func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView
 }

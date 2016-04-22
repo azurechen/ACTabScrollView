@@ -18,23 +18,23 @@ import UIKit
 @IBDesignable
 public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
-    private let DEFAULT_TAB_HEIGHT: CGFloat = 60
-    
-    // public variables
-    @IBInspectable var tabGradient: Bool = true
-    @IBInspectable var tabSectionBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable var contentSectionBackgroundColor: UIColor = UIColor.whiteColor()
-    @IBInspectable var cachePageLimit: Int = 3
-    @IBInspectable var pagingEnabled: Bool = true {
+    // MARK: Public Variables
+    @IBInspectable public var tabGradient: Bool = true
+    @IBInspectable public var tabSectionBackgroundColor: UIColor = UIColor.whiteColor()
+    @IBInspectable public var contentSectionBackgroundColor: UIColor = UIColor.whiteColor()
+    @IBInspectable public var cachePageLimit: Int = 3
+    @IBInspectable public var pagingEnabled: Bool = true {
         didSet {
             contentSectionScrollView.pagingEnabled = pagingEnabled
         }
     }
-    @IBInspectable var defaultPage = 0
+    @IBInspectable public var defaultPage: Int = 0
+    @IBInspectable public var defaultTabHeight: CGFloat = 30
     
-    var delegate: ACTabScrollViewDelegate?
-    var dataSource: ACTabScrollViewDataSource?
+    public var delegate: ACTabScrollViewDelegate?
+    public var dataSource: ACTabScrollViewDataSource?
     
+    // MARK: Private Variables
     private var tabSectionScrollView: UIScrollView!
     private var contentSectionScrollView: UIScrollView!
     private var cachedPageTabs: [Int: UIView] = [:]
@@ -43,8 +43,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             var limit = 3
             if (cachePageLimit > 3) {
                 limit = cachePageLimit
-            } else if (cachePageLimit < 1 && dataSource != nil) {
-                limit = dataSource!.numberOfPagesInTabScrollView(self)
+            } else if (cachePageLimit < 1) {
+                limit = numberOfPages
             }
             if (cachedPageContents.count > limit) {
                 let (_, view) = cachedPageContents.popFirst()!
@@ -57,24 +57,22 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var pageIndex: Int {
         get {
             var index = -1
-            if (dataSource != nil && dataSource!.numberOfPagesInTabScrollView(self) != 0) {
-                let count = dataSource!.numberOfPagesInTabScrollView(self)
-                
+            if (numberOfPages != 0) {
                 let currentOffset = tabSectionScrollView.contentOffset.x
                 var startOffset = 0 as CGFloat
-                var endOffset = (tabSectionScrollView.contentInset.left * -1) - (dataSource!.tabScrollView(self, widthForTabAtIndex: 0) / 2)
+                var endOffset = (tabSectionScrollView.contentInset.left * -1) - (widthForTabAtIndex(0) / 2)
                 
                 var boundLeft = 0 as CGFloat
                 var boundRight = 0 as CGFloat
                 
-                for (var i = 0; i < count; i++) {
+                for i in 0..<numberOfPages {
                     startOffset = endOffset
-                    endOffset = startOffset + dataSource!.tabScrollView(self, widthForTabAtIndex: i)
+                    endOffset = startOffset + widthForTabAtIndex(i)
                     
                     if (i == 0) {
                         boundLeft = startOffset
                     }
-                    if (i == count - 1) {
+                    if (i == numberOfPages - 1) {
                         boundRight = endOffset
                     }
                     
@@ -87,18 +85,18 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     index = 0
                 }
                 if (currentOffset > boundRight) {
-                    index = count - 1
+                    index = numberOfPages - 1
                 }
             }
             return index
         }
         set(index) {
-            if (dataSource != nil && dataSource!.numberOfPagesInTabScrollView(self) != 0) {
+            if (numberOfPages != 0) {
                 var tabOffsetX = 0 as CGFloat
                 var contentOffsetX = 0 as CGFloat
                 for (var i = 0; i < index; i++) {
-                    tabOffsetX += dataSource!.tabScrollView(self, widthForTabAtIndex: index)
-                    contentOffsetX += dataSource!.tabScrollView(self, widthForContentAtIndex: index)
+                    tabOffsetX += widthForTabAtIndex(index)
+                    contentOffsetX += self.frame.width
                 }
                 // set default position of tabs and contents
                 tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
@@ -110,8 +108,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    //private var pages = [Page]()
-    
     private var isStarted = false
     private var prevScrollingIndex = -1
     private var prevPageIndex = -1
@@ -119,6 +115,24 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var changePageWaitForCallback = false
     private var changePageCallback: ((Void) -> (Void))?
     
+    // MARK: DataSource
+    private var numberOfPages: Int {
+        return dataSource?.numberOfPagesInTabScrollView(self) ?? 0
+    }
+    
+    private func widthForTabAtIndex(index: Int) -> CGFloat {
+        return dataSource?.tabScrollView(self, widthForTabAtIndex: index) ?? 0
+    }
+    
+    private func tabViewForPageAtIndex(index: Int) -> UIView? {
+        return dataSource?.tabScrollView(self, tabViewForPageAtIndex: index)
+    }
+    
+    private func contentViewForPageAtIndex(index: Int) -> UIView? {
+        return dataSource?.tabScrollView(self, contentViewForPageAtIndex: index)
+    }
+    
+    // MARK: Init
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
@@ -147,9 +161,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     override public func drawRect(rect: CGRect) {
-        if (dataSource != nil && dataSource!.numberOfPagesInTabScrollView(self) != 0) {
-            let count = dataSource!.numberOfPagesInTabScrollView(self)
-            
+        if (numberOfPages != 0) {
             // set custom attrs
             tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
             contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
@@ -168,7 +180,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             
             var tabSectionScrollViewContentWidth: CGFloat = 0
             var contentSectionScrollViewContentWidth: CGFloat = 0
-            let tabSectionScrollViewHeight = dataSource!.heightForTabInTabScrollView(self)
+            let tabSectionScrollViewHeight = defaultTabHeight
             let contentSectionScrollViewHeight = self.frame.size.height - tabSectionScrollViewHeight
             
             // set tabSectionScrollView size
@@ -179,18 +191,19 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionScrollViewHeight, width: self.frame.size.width, height: contentSectionScrollViewHeight)
             
             // set pages and content views
-            for i in 0..<count {
-                let tabView = dataSource!.tabScrollView(self, tabForPageAtIndex: i)
-                tabView.frame = CGRect(
-                    x: tabSectionScrollViewContentWidth,
-                    y: 0,
-                    width: dataSource!.tabScrollView(self, widthForTabAtIndex: i),
-                    height: tabSectionScrollView.frame.size.height)
-                // bind event
-                tabView.tag = i
-                tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
-                cachedPageTabs[i] = tabView
-                tabSectionScrollView.addSubview(tabView)
+            for i in 0..<numberOfPages {
+                if let tabView = tabViewForPageAtIndex(i) {
+                    tabView.frame = CGRect(
+                        x: tabSectionScrollViewContentWidth,
+                        y: 0,
+                        width: widthForTabAtIndex(i),
+                        height: tabSectionScrollView.frame.size.height)
+                    // bind event
+                    tabView.tag = i
+                    tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
+                    cachedPageTabs[i] = tabView
+                    tabSectionScrollView.addSubview(tabView)
+                }
 
 // TODO: Remove later
 //                // without lazy loading
@@ -199,20 +212,20 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
 //                    contentSectionScrollView.addSubview(page.contentView)
 //                }
                 
-                tabSectionScrollViewContentWidth += dataSource!.tabScrollView(self, widthForTabAtIndex: i)
-                contentSectionScrollViewContentWidth += dataSource!.tabScrollView(self, widthForContentAtIndex: i)
+                tabSectionScrollViewContentWidth += widthForTabAtIndex(i)
+                contentSectionScrollViewContentWidth += self.frame.width
             }
             tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionScrollViewHeight)
             contentSectionScrollView.contentSize = CGSize(width: contentSectionScrollViewContentWidth, height: contentSectionScrollViewHeight)
             
             // set contentInset of tab
-            let tabPaddingLeft = (self.frame.size.width / 2) - (dataSource!.tabScrollView(self, widthForTabAtIndex: 0) / 2)
-            let tabPaddingRight = (self.frame.size.width / 2) - (dataSource!.tabScrollView(self, widthForTabAtIndex: count) / 2)
+            let tabPaddingLeft = (self.frame.size.width / 2) - (widthForTabAtIndex(0) / 2)
+            let tabPaddingRight = (self.frame.size.width / 2) - (widthForTabAtIndex(numberOfPages) / 2)
             tabSectionScrollView.contentInset = UIEdgeInsets(top: 0, left: tabPaddingLeft, bottom: 0, right: tabPaddingRight)
             
             // set contentInset of content
-            let contentPaddingLeft = (self.frame.size.width / 2) - (dataSource!.tabScrollView(self, widthForContentAtIndex: 0) / 2)
-            let contentPaddingRight = (self.frame.size.width / 2) - (dataSource!.tabScrollView(self, widthForContentAtIndex: count) / 2)
+            let contentPaddingLeft = (self.frame.size.width / 2) - (self.frame.width / 2)
+            let contentPaddingRight = (self.frame.size.width / 2) - (self.frame.width / 2)
             contentSectionScrollView.contentInset = UIEdgeInsets(top: 0, left: contentPaddingLeft, bottom: 0, right: contentPaddingRight)
             
             // first time
@@ -314,10 +327,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private func resetTabs() {
         if (tabGradient) {
             let currentIndex = pageIndex
-            if (dataSource != nil && dataSource!.numberOfPagesInTabScrollView(self) != 0) {
-                let count = dataSource!.numberOfPagesInTabScrollView(self)
-                
-                for (var i = 0; i < count; i++) {
+            if (numberOfPages != 0) {
+                for i in 0..<numberOfPages {
                     var alpha: CGFloat = 1.0
                     
                     let offset = abs(i - currentIndex)
@@ -339,7 +350,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     private func moveToIndex(index: Int, animated: Bool) {
-        if (index >= 0 && index < dataSource!.numberOfPagesInTabScrollView(self)) {
+        if (index >= 0 && index < numberOfPages) {
             if (pagingEnabled) {
                 // force stop
                 stopScrolling()
@@ -435,15 +446,14 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
 //    }
     
     private func lazyLoadPages() {
-        if (dataSource != nil && dataSource!.numberOfPagesInTabScrollView(self) != 0) {
-            let count = dataSource!.numberOfPagesInTabScrollView(self)
+        if (numberOfPages != 0) {
             let offset = 1
             let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
-            let rightBoundIndex = pageIndex + offset < count ? pageIndex + offset : count - 1
+            let rightBoundIndex = pageIndex + offset < numberOfPages ? pageIndex + offset : numberOfPages - 1
             
             var currentContentWidth: CGFloat = 0.0
-            for (var i = 0; i < count; i++) {
-                let width = dataSource!.tabScrollView(self, widthForContentAtIndex: i)
+            for i in 0..<numberOfPages {
+                let width = self.frame.width
                 if (i >= leftBoundIndex && i <= rightBoundIndex) {
                     let frame = CGRect(
                         x: currentContentWidth,
@@ -460,11 +470,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     private func insertPageAtIndex(index: Int, frame: CGRect) {
         if (cachedPageContents[index] == nil) {
-            let view = dataSource!.tabScrollView(self, contentForPageAtIndex: index)
-            view.frame = frame
-            cachedPageContents.removeValueForKey(index)
-            cachedPageContents[index] = view
-            contentSectionScrollView.addSubview(view)
+            if let view = contentViewForPageAtIndex(index) {
+                view.frame = frame
+                cachedPageContents.removeValueForKey(index)
+                cachedPageContents[index] = view
+                contentSectionScrollView.addSubview(view)
+            }
         }
     }
 }
