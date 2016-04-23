@@ -38,20 +38,15 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var tabSectionScrollView: UIScrollView!
     private var contentSectionScrollView: UIScrollView!
     private var cachedPageTabs: [Int: UIView] = [:]
-    private var cachedPageContents: [Int: UIView] = [:] {
-        didSet {
-            var limit = 3
-            if (cachePageLimit > 3) {
-                limit = cachePageLimit
-            } else if (cachePageLimit < 1) {
-                limit = numberOfPages
-            }
-            if (cachedPageContents.count > limit) {
-                let (_, view) = cachedPageContents.popFirst()!
-                view.removeFromSuperview()
-            }
-            print("limit: \(limit) ,size: \(cachedPageContents.count)")
+    private var cachedPageContents: CacheQueue<Int, UIView> = CacheQueue()
+    private var realCachePageLimit: Int {
+        var limit = 3
+        if (cachePageLimit > 3) {
+            limit = cachePageLimit
+        } else if (cachePageLimit < 1) {
+            limit = numberOfPages
         }
+        return limit
     }
     
     private var pageIndex: Int {
@@ -465,6 +460,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 
                 currentContentWidth += width
             }
+            
+            // remove older caches
+            while (cachedPageContents.count > realCachePageLimit) {
+                if let (_, view) = cachedPageContents.popFirst() {
+                    view.removeFromSuperview()
+                }
+            }
         }
     }
     
@@ -472,10 +474,54 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         if (cachedPageContents[index] == nil) {
             if let view = contentViewForPageAtIndex(index) {
                 view.frame = frame
-                cachedPageContents.removeValueForKey(index)
                 cachedPageContents[index] = view
                 contentSectionScrollView.addSubview(view)
             }
+        } else {
+            cachedPageContents.awake(index)
+        }
+    }
+}
+
+public struct CacheQueue<Key: Hashable, Value> {
+    
+    var keys: Array<Key> = []
+    var values: Dictionary<Key, Value> = [:]
+    var count: Int {
+        return keys.count
+    }
+    
+    subscript(key: Key) -> Value? {
+        get {
+            return values[key]
+        }
+        set {
+            // key/value pair exists, delete it first
+            if let index = keys.indexOf(key) {
+                keys.removeAtIndex(index)
+            }
+            // append key
+            if (newValue != nil) {
+                keys.append(key)
+            }
+            // set value
+            values[key] = newValue
+        }
+    }
+    
+    mutating func awake(key: Key) {
+        if let index = keys.indexOf(key) {
+            keys.removeAtIndex(index)
+            keys.append(key)
+        }
+    }
+    
+    mutating func popFirst() -> (Key, Value)? {
+        let key = keys.removeFirst()
+        if let value = values.removeValueForKey(key) {
+            return (key, value)
+        } else {
+            return nil
         }
     }
 }
