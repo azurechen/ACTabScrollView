@@ -150,9 +150,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionScrollView.showsHorizontalScrollIndicator = false
         contentSectionScrollView.showsVerticalScrollIndicator = false
         contentSectionScrollView.delegate = self
-        
-        // set init index
-        pageIndex = 0
     }
     
     override init(frame: CGRect) {
@@ -164,12 +161,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
         contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
         
-        // reload data
+        // first time setup pages
         setupPages()
         
         // first time
         if (!isStarted) {
-            // reset pageIndex
+            // set defaule pageIndex
             pageIndex = defaultPage
             
             isStarted = true
@@ -248,6 +245,14 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     // MARK: public methods
 //    func scroll(offsetX: CGFloat) {
 //    }
+    
+    public func reloadData() {
+        // setup pages
+        setupPages()
+        
+        // load pages
+        lazyLoadPages()
+    }
     
     public func changePageToIndex(index: Int, animated: Bool) {
         activeScrollView = tabSectionScrollView
