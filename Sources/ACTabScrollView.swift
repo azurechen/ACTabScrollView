@@ -12,6 +12,7 @@
 //   3. Performace improvement
 //   4. Adjust the scrolling offset if tabs have diffent widths
 //   5. Add paging support if the size of page.contentViews are smaller than tabSectionScrollView size
+//   6. Test reloadData function
 
 import UIKit
 
@@ -97,7 +98,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
                 contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
                 
-                resetTabs()
+                updateTabAppearance()
             }
             prevPageIndex = index
         }
@@ -159,67 +160,23 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     override public func drawRect(rect: CGRect) {
-        if (numberOfPages != 0) {
-            // set custom attrs
-            tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
-            contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
+        // set custom attrs
+        tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
+        contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
+        
+        // reload data
+        setupPages()
+        
+        // first time
+        if (!isStarted) {
+            // reset pageIndex
+            pageIndex = defaultPage
             
-            // clear all caches
-            cachedPageTabs.removeAll()
-            for subview in tabSectionScrollView.subviews {
-                subview.removeFromSuperview()
-            }
-            cachedPageContents.removeAll()
-            for subview in contentSectionScrollView.subviews {
-                subview.removeFromSuperview()
-            }
-// TODO: Remove later
-//            for page in pages {
-//                page.isLoaded = false
-//            }
-            
-            // reset the fixed size of tab section
-            tabSectionHeight = defaultTabHeight
-            tabSectionScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabSectionHeight)
-            tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
-            tabSectionScrollView.contentInset = UIEdgeInsets(
-                top: 0,
-                left: (self.frame.width / 2) - (widthForTabAtIndex(0) / 2),
-                bottom: 0,
-                right: (self.frame.width / 2) - (widthForTabAtIndex(numberOfPages) / 2))
-            
-            // reset the fixed size of content section
-            contentSectionHeight = self.frame.size.height - tabSectionHeight
-            contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
-            
-            // set tabs
-            var tabSectionScrollViewContentWidth: CGFloat = 0
-            for i in 0..<numberOfPages {
-                if let tabView = tabViewForPageAtIndex(i) {
-                    tabView.frame = CGRect(
-                        x: tabSectionScrollViewContentWidth,
-                        y: 0,
-                        width: widthForTabAtIndex(i),
-                        height: tabSectionScrollView.frame.size.height)
-                    // bind event
-                    tabView.tag = i
-                    tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
-                    cachedPageTabs[i] = tabView
-                    tabSectionScrollView.addSubview(tabView)
-                }
-                tabSectionScrollViewContentWidth += widthForTabAtIndex(i)
-            }
-            tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionHeight)
-            
-            // first time
-            if (!isStarted) {
-                // reset pageIndex
-                pageIndex = defaultPage
-                
-                isStarted = true
-            }
-            lazyLoadPages()
+            isStarted = true
         }
+        
+        // load pages
+        lazyLoadPages()
     }
     
     // MARK: - Tabs Click
@@ -273,7 +230,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             if (scrollView == contentSectionScrollView) {
                 tabSectionScrollView.contentOffset.x = (contentSectionScrollView.contentOffset.x + contentSectionScrollView.contentInset.left) * (tabSectionScrollView.contentSize.width / contentSectionScrollView.contentSize.width) - tabSectionScrollView.contentInset.left
             }
-            resetTabs()
+            updateTabAppearance()
         }
         
         if (isStarted && prevScrollingIndex != pageIndex) {
@@ -288,26 +245,75 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    func scroll(offsetX: CGFloat) {
-    }
+    // MARK: public methods
+//    func scroll(offsetX: CGFloat) {
+//    }
     
-    func changePageToIndex(index: Int, animated: Bool) {
+    public func changePageToIndex(index: Int, animated: Bool) {
         activeScrollView = tabSectionScrollView
         moveToIndex(index, animated: animated)
     }
     
-    func changePageToIndex(index: Int, animated: Bool, withCallback callback: (Void) -> Void) {
+    public func changePageToIndex(index: Int, animated: Bool, withCallback callback: (Void) -> Void) {
         changePageWaitForCallback = true
         changePageCallback = callback
         changePageToIndex(index, animated: animated)
     }
     
-    func stopScrolling() {
+    // MARK: private methods
+    private func stopScrolling() {
         tabSectionScrollView.setContentOffset(tabSectionScrollView.contentOffset, animated: false)
         contentSectionScrollView.setContentOffset(contentSectionScrollView.contentOffset, animated: false)
     }
     
-    private func resetTabs() {
+    private func setupPages() {
+        // clear all caches
+        cachedPageTabs.removeAll()
+        for subview in tabSectionScrollView.subviews {
+            subview.removeFromSuperview()
+        }
+        cachedPageContents.removeAll()
+        for subview in contentSectionScrollView.subviews {
+            subview.removeFromSuperview()
+        }
+        
+        if (numberOfPages != 0) {
+            // reset the fixed size of tab section
+            tabSectionHeight = defaultTabHeight
+            tabSectionScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabSectionHeight)
+            tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
+            tabSectionScrollView.contentInset = UIEdgeInsets(
+                top: 0,
+                left: (self.frame.width / 2) - (widthForTabAtIndex(0) / 2),
+                bottom: 0,
+                right: (self.frame.width / 2) - (widthForTabAtIndex(numberOfPages) / 2))
+            
+            // reset the fixed size of content section
+            contentSectionHeight = self.frame.size.height - tabSectionHeight
+            contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
+            
+            // setup tabs first, and set contents later (lazyLoadPages)
+            var tabSectionScrollViewContentWidth: CGFloat = 0
+            for i in 0..<numberOfPages {
+                if let tabView = tabViewForPageAtIndex(i) {
+                    tabView.frame = CGRect(
+                        x: tabSectionScrollViewContentWidth,
+                        y: 0,
+                        width: widthForTabAtIndex(i),
+                        height: tabSectionScrollView.frame.size.height)
+                    // bind event
+                    tabView.tag = i
+                    tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
+                    cachedPageTabs[i] = tabView
+                    tabSectionScrollView.addSubview(tabView)
+                }
+                tabSectionScrollViewContentWidth += widthForTabAtIndex(i)
+            }
+            tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionHeight)
+        }
+    }
+    
+    private func updateTabAppearance() {
         if (tabGradient) {
             let currentIndex = pageIndex
             if (numberOfPages != 0) {
@@ -350,6 +356,49 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     self.delegate!.tabScrollView(self, didChangePageTo: index)
                 }
             }
+        }
+    }
+    
+    private func lazyLoadPages() {
+        if (numberOfPages != 0) {
+            let offset = 1
+            let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
+            let rightBoundIndex = pageIndex + offset < numberOfPages ? pageIndex + offset : numberOfPages - 1
+            
+            var currentContentWidth: CGFloat = 0.0
+            for i in 0..<numberOfPages {
+                let width = self.frame.width
+                if (i >= leftBoundIndex && i <= rightBoundIndex) {
+                    let frame = CGRect(
+                        x: currentContentWidth,
+                        y: 0,
+                        width: width,
+                        height: contentSectionScrollView.frame.size.height)
+                    insertPageAtIndex(i, frame: frame)
+                }
+                
+                currentContentWidth += width
+            }
+            contentSectionScrollView.contentSize = CGSize(width: currentContentWidth, height: contentSectionHeight)
+            
+            // remove older caches
+            while (cachedPageContents.count > realCachePageLimit) {
+                if let (_, view) = cachedPageContents.popFirst() {
+                    view.removeFromSuperview()
+                }
+            }
+        }
+    }
+    
+    private func insertPageAtIndex(index: Int, frame: CGRect) {
+        if (cachedPageContents[index] == nil) {
+            if let view = contentViewForPageAtIndex(index) {
+                view.frame = frame
+                cachedPageContents[index] = view
+                contentSectionScrollView.addSubview(view)
+            }
+        } else {
+            cachedPageContents.awake(index)
         }
     }
     
@@ -428,48 +477,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
 //        page.contentView.removeFromSuperview()
 //    }
     
-    private func lazyLoadPages() {
-        if (numberOfPages != 0) {
-            let offset = 1
-            let leftBoundIndex = pageIndex - offset > 0 ? pageIndex - offset : 0
-            let rightBoundIndex = pageIndex + offset < numberOfPages ? pageIndex + offset : numberOfPages - 1
-            
-            var currentContentWidth: CGFloat = 0.0
-            for i in 0..<numberOfPages {
-                let width = self.frame.width
-                if (i >= leftBoundIndex && i <= rightBoundIndex) {
-                    let frame = CGRect(
-                        x: currentContentWidth,
-                        y: 0,
-                        width: width,
-                        height: contentSectionScrollView.frame.size.height)
-                    insertPageAtIndex(i, frame: frame)
-                }
-                
-                currentContentWidth += width
-            }
-            contentSectionScrollView.contentSize = CGSize(width: currentContentWidth, height: contentSectionHeight)
-            
-            // remove older caches
-            while (cachedPageContents.count > realCachePageLimit) {
-                if let (_, view) = cachedPageContents.popFirst() {
-                    view.removeFromSuperview()
-                }
-            }
-        }
-    }
     
-    private func insertPageAtIndex(index: Int, frame: CGRect) {
-        if (cachedPageContents[index] == nil) {
-            if let view = contentViewForPageAtIndex(index) {
-                view.frame = frame
-                cachedPageContents[index] = view
-                contentSectionScrollView.addSubview(view)
-            }
-        } else {
-            cachedPageContents.awake(index)
-        }
-    }
 }
 
 public struct CacheQueue<Key: Hashable, Value> {
