@@ -108,8 +108,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var prevScrollingIndex = -1
     private var prevPageIndex = -1
     
-    private var changePageWaitForCallback = false
-    private var changePageCallback: ((Void) -> (Void))?
+    private var isWaitingForPageChangedCallback = false
+    private var pageChangedCallback: (Void -> Void)?
     
     private var tabSectionHeight: CGFloat = 0
     private var contentSectionHeight: CGFloat = 0
@@ -211,9 +211,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation stop programmatically
     public func scrollViewDidEndScrollingAnimation(scrollView: UIScrollView) {
-        if (changePageWaitForCallback) {
-            changePageWaitForCallback = false
-            changePageCallback?()
+        if (isWaitingForPageChangedCallback) {
+            isWaitingForPageChangedCallback = false
+            pageChangedCallback?()
         }
     }
     
@@ -242,7 +242,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    // MARK: public methods
+    // MARK: Public Methods
 //    func scroll(offsetX: CGFloat) {
 //    }
     
@@ -259,13 +259,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         moveToIndex(index, animated: animated)
     }
     
-    public func changePageToIndex(index: Int, animated: Bool, withCallback callback: (Void) -> Void) {
-        changePageWaitForCallback = true
-        changePageCallback = callback
+    public func changePageToIndex(index: Int, animated: Bool, completion: (Void -> Void)) {
+        isWaitingForPageChangedCallback = true
+        pageChangedCallback = completion
         changePageToIndex(index, animated: animated)
     }
     
-    // MARK: private methods
+    // MARK: Private Methods
     private func stopScrolling() {
         tabSectionScrollView.setContentOffset(tabSectionScrollView.contentOffset, animated: false)
         contentSectionScrollView.setContentOffset(contentSectionScrollView.contentOffset, animated: false)
