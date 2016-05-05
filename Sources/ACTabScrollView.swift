@@ -94,13 +94,10 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     tabOffsetX += widthForTabAtIndex(index)
                     contentOffsetX += self.frame.width
                 }
-                dispatch_async(dispatch_get_main_queue()) {
-                    // set default position of tabs and contents
-                    self.tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + self.tabSectionScrollView.contentInset.left * -1, y: self.tabSectionScrollView.contentOffset.y)
-                    self.contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + self.contentSectionScrollView.contentInset.left * -1, y: self.contentSectionScrollView.contentOffset.y)
-                    print(self.contentSectionScrollView.contentOffset)
-                    self.updateTabAppearance()
-                }
+                // set default position of tabs and contents
+                tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
+                contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
+                updateTabAppearance()
             }
             prevPageIndex = index
         }
@@ -161,25 +158,27 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     override public func layoutSubviews() {
         super.layoutSubviews()
         
-        // set custom attrs
-        tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
-        contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
-        
-        // first time setup pages
-        setupPages()
-        
-        
-        // first time set defaule pageIndex
-        if (!isStarted) {
-            pageIndex = defaultPage
-            isStarted = true
-        } else {
+        dispatch_async(dispatch_get_main_queue()) {
+            // set custom attrs
+            self.tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
+            self.contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
             
-            pageIndex = prevPageIndex
+            // first time setup pages
+            self.setupPages()
+            
+            
+            // first time set defaule pageIndex
+            if (!self.isStarted) {
+                self.pageIndex = self.defaultPage
+                self.isStarted = true
+            } else {
+                
+                self.pageIndex = self.prevPageIndex
+            }
+            
+            // load pages
+            self.lazyLoadPages()
         }
-        
-        // load pages
-        lazyLoadPages()
     }
     
     // MARK: - Tabs Click
@@ -377,7 +376,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             let rightBoundIndex = pageIndex + offset < numberOfPages ? pageIndex + offset : numberOfPages - 1
             
             var currentContentWidth: CGFloat = 0.0
-            for i in 0..<numberOfPages {
+            for i in 0 ..< numberOfPages {
                 let width = self.frame.width
                 if (i >= leftBoundIndex && i <= rightBoundIndex) {
                     let frame = CGRect(
