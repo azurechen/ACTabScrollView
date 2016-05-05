@@ -157,8 +157,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     override public func layoutSubviews() {
         super.layoutSubviews()
-        self.isStarted = false
         
+        // reset status and stop scrolling immediately
+        isStarted = false
+        stopScrolling()
+        
+        // async necessarily
         dispatch_async(dispatch_get_main_queue()) {
             // set custom attrs
             self.tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
@@ -236,9 +240,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             
             prevScrollingIndex = pageIndex
             // callback
-            if (delegate != nil) {
-                self.delegate!.tabScrollView(self, didScrollPageTo: pageIndex)
-            }
+            delegate?.tabScrollView(self, didScrollPageTo: pageIndex)
         }
     }
     
@@ -359,9 +361,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             if (prevPageIndex != index) {
                 prevPageIndex = index
                 // callback
-                if (delegate != nil) {
-                    self.delegate!.tabScrollView(self, didChangePageTo: index)
-                }
+                delegate?.tabScrollView(self, didChangePageTo: index)
             }
         }
     }
