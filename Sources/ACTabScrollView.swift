@@ -104,8 +104,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     private var isStarted = false
-    private var prevScrollingIndex = -1
-    private var prevPageIndex = -1
+    private var prevScrollingIndex: Int?
+    private var prevPageIndex: Int?
     
     private var isWaitingForPageChangedCallback = false
     private var pageChangedCallback: (Void -> Void)?
@@ -157,6 +157,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     override public func layoutSubviews() {
         super.layoutSubviews()
+        self.isStarted = false
         
         dispatch_async(dispatch_get_main_queue()) {
             // set custom attrs
@@ -166,15 +167,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             // first time setup pages
             self.setupPages()
             
-            
             // first time set defaule pageIndex
-            if (!self.isStarted) {
-                self.pageIndex = self.defaultPage
-                self.isStarted = true
-            } else {
-                
-                self.pageIndex = self.prevPageIndex
-            }
+            self.pageIndex = self.prevScrollingIndex ?? self.prevPageIndex ?? self.defaultPage
+            self.isStarted = true
             
             // load pages
             self.lazyLoadPages()
@@ -340,8 +335,10 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     }
                     
                     UIView.animateWithDuration(NSTimeInterval(0.5), animations: { () in
-                        self.cachedPageTabs[i]!.alpha = alpha
-                        return
+                        if let tab = self.cachedPageTabs[i] {
+                            tab.alpha = alpha
+                            return
+                        }
                     })
                 }
             }
