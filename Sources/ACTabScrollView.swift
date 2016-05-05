@@ -90,15 +90,17 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             if (numberOfPages != 0) {
                 var tabOffsetX = 0 as CGFloat
                 var contentOffsetX = 0 as CGFloat
-                for (var i = 0; i < index; i++) {
+                for _ in 0 ..< index {
                     tabOffsetX += widthForTabAtIndex(index)
                     contentOffsetX += self.frame.width
                 }
-                // set default position of tabs and contents
-                tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
-                contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
-                
-                updateTabAppearance()
+                dispatch_async(dispatch_get_main_queue()) {
+                    // set default position of tabs and contents
+                    self.tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + self.tabSectionScrollView.contentInset.left * -1, y: self.tabSectionScrollView.contentOffset.y)
+                    self.contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + self.contentSectionScrollView.contentInset.left * -1, y: self.contentSectionScrollView.contentOffset.y)
+                    print(self.contentSectionScrollView.contentOffset)
+                    self.updateTabAppearance()
+                }
             }
             prevPageIndex = index
         }
@@ -156,7 +158,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         super.init(frame: frame)
     }
     
-    override public func drawRect(rect: CGRect) {
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        
         // set custom attrs
         tabSectionScrollView.backgroundColor = tabSectionBackgroundColor
         contentSectionScrollView.backgroundColor = contentSectionBackgroundColor
@@ -164,12 +168,14 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         // first time setup pages
         setupPages()
         
-        // first time
+        
+        // first time set defaule pageIndex
         if (!isStarted) {
-            // set defaule pageIndex
             pageIndex = defaultPage
-            
             isStarted = true
+        } else {
+            
+            pageIndex = prevPageIndex
         }
         
         // load pages
