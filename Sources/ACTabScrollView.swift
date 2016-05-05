@@ -61,7 +61,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 var boundLeft = 0 as CGFloat
                 var boundRight = 0 as CGFloat
                 
-                for i in 0..<numberOfPages {
+                for i in 0 ..< numberOfPages {
                     startOffset = endOffset
                     endOffset = startOffset + widthForTabAtIndex(i)
                     
@@ -97,7 +97,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 // set default position of tabs and contents
                 tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
                 contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
-                updateTabAppearance()
+                updateTabAppearance(animated: false)
             }
             prevPageIndex = index
         }
@@ -301,7 +301,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             
             // setup tabs first, and set contents later (lazyLoadPages)
             var tabSectionScrollViewContentWidth: CGFloat = 0
-            for i in 0..<numberOfPages {
+            for i in 0 ..< numberOfPages {
                 if let tabView = tabViewForPageAtIndex(i) {
                     tabView.frame = CGRect(
                         x: tabSectionScrollViewContentWidth,
@@ -320,11 +320,11 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
     }
     
-    private func updateTabAppearance() {
+    private func updateTabAppearance(animated animated: Bool = true) {
         if (tabGradient) {
             let currentIndex = pageIndex
             if (numberOfPages != 0) {
-                for i in 0..<numberOfPages {
+                for i in 0 ..< numberOfPages {
                     var alpha: CGFloat = 1.0
                     
                     let offset = abs(i - currentIndex)
@@ -336,12 +336,16 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                         alpha = 1.0
                     }
                     
-                    UIView.animateWithDuration(NSTimeInterval(0.5), animations: { () in
-                        if let tab = self.cachedPageTabs[i] {
+                    if let tab = self.cachedPageTabs[i] {
+                        if (animated) {
+                            UIView.animateWithDuration(NSTimeInterval(0.5), animations: { () in
+                                tab.alpha = alpha
+                                return
+                            })
+                        } else {
                             tab.alpha = alpha
-                            return
                         }
-                    })
+                    }
                 }
             }
         }
