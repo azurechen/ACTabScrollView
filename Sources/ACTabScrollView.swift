@@ -10,6 +10,9 @@
 //   1. Performace improvement
 //   2. Adjust the scrolling offset if tabs have diffent widths
 //   3. Test reloadData function
+//   4. Init with frame
+//   5. Flexiable tab height
+//   6. Tabs in the bottom
 
 import UIKit
 
@@ -47,61 +50,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         return limit
     }
     
-    private var pageIndex: Int {
-        get {
-            var index = -1
-            if (numberOfPages != 0) {
-                let currentOffset = tabSectionScrollView.contentOffset.x
-                var startOffset = 0 as CGFloat
-                var endOffset = (tabSectionScrollView.contentInset.left * -1) - (widthForTabAtIndex(0) / 2)
-                
-                var boundLeft = 0 as CGFloat
-                var boundRight = 0 as CGFloat
-                
-                for i in 0 ..< numberOfPages {
-                    startOffset = endOffset
-                    endOffset = startOffset + widthForTabAtIndex(i)
-                    
-                    if (i == 0) {
-                        boundLeft = startOffset
-                    }
-                    if (i == numberOfPages - 1) {
-                        boundRight = endOffset
-                    }
-                    
-                    if (startOffset <= currentOffset && currentOffset <= endOffset) {
-                        index = i
-                    }
-                }
-                
-                if (currentOffset < boundLeft) {
-                    index = 0
-                }
-                if (currentOffset > boundRight) {
-                    index = numberOfPages - 1
-                }
-            }
-            return index
-        }
-        set(index) {
-            if (numberOfPages != 0) {
-                var tabOffsetX = 0 as CGFloat
-                var contentOffsetX = 0 as CGFloat
-                for _ in 0 ..< index {
-                    tabOffsetX += widthForTabAtIndex(index)
-                    contentOffsetX += self.frame.width
-                }
-                // set default position of tabs and contents
-                tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
-                contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
-                updateTabAppearance(animated: false)
-            }
-            prevPageIndex = index
-        }
-    }
-    
     private var isStarted = false
-    private var prevScrollingIndex: Int?
+    private var pageIndex: Int!
     private var prevPageIndex: Int?
     
     private var isWaitingForPageChangedCallback = false
@@ -169,7 +119,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             self.setupPages()
             
             // first time set defaule pageIndex
-            self.pageIndex = self.prevScrollingIndex ?? self.prevPageIndex ?? self.defaultPage
+            self.initWithPageIndex(self.pageIndex ?? self.defaultPage)
             self.isStarted = true
             
             // load pages
@@ -200,13 +150,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling animation stop with decelerating
     public func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
-        moveToIndex(pageIndex, animated: true)
+        moveToIndex(properPageIndex(), animated: true)
     }
     
     // scrolling animation stop without decelerating
     public func scrollViewDidEndDragging(scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if (!decelerate) {
-            moveToIndex(pageIndex, animated: true)
+            moveToIndex(properPageIndex(), animated: true)
         }
     }
     
@@ -231,13 +181,16 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             updateTabAppearance()
         }
         
-        if (isStarted && prevScrollingIndex != pageIndex) {
+        let currentIndex = properPageIndex()
+        if (isStarted && pageIndex != currentIndex) {
+            // set index
+            pageIndex = currentIndex
+            
             // lazy loading
             lazyLoadPages()
             
-            prevScrollingIndex = pageIndex
             // callback
-            delegate?.tabScrollView(self, didScrollPageTo: pageIndex)
+            delegate?.tabScrollView(self, didScrollPageTo: currentIndex)
         }
     }
     
@@ -270,6 +223,31 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionScrollView.setContentOffset(contentSectionScrollView.contentOffset, animated: false)
     }
     
+    private func initWithPageIndex(index: Int) {
+        // set pageIndex
+        pageIndex = index
+        prevPageIndex = pageIndex
+        
+        // init UI
+        if (numberOfPages != 0) {
+            var tabOffsetX = 0 as CGFloat
+            var contentOffsetX = 0 as CGFloat
+            for _ in 0 ..< index {
+                tabOffsetX += widthForTabAtIndex(index)
+                contentOffsetX += self.frame.width
+            }
+            // set default position of tabs and contents
+            tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
+            contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
+            updateTabAppearance(animated: false)
+        }
+    }
+    
+    private func properPageIndex() -> Int {
+        let width = self.frame.width
+        return Int((contentSectionScrollView.contentOffset.x + (0.5 * width)) / width)
+    }
+
     private func setupPages() {
         // clear all caches
         cachedPageTabs.removeAll()
@@ -319,12 +297,11 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     private func updateTabAppearance(animated animated: Bool = true) {
         if (tabGradient) {
-            let currentIndex = pageIndex
             if (numberOfPages != 0) {
                 for i in 0 ..< numberOfPages {
                     var alpha: CGFloat = 1.0
                     
-                    let offset = abs(i - currentIndex)
+                    let offset = abs(i - pageIndex)
                     if (offset > 1) {
                         alpha = 0.2
                     } else if (offset > 0) {
