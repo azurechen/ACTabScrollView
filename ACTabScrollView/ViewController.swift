@@ -40,7 +40,7 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
     }
     
     func tabScrollView(tabScrollView: ACTabScrollView, widthForTabAtIndex index: Int) -> CGFloat {
-        return 60
+        return (CGFloat(arc4random_uniform(5)) + 1) * 10
     }
     
     func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {

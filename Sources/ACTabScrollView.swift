@@ -61,12 +61,10 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     private var contentSectionHeight: CGFloat = 0
     
     // MARK: DataSource
-    private var numberOfPages: Int {
-        return dataSource?.numberOfPagesInTabScrollView(self) ?? 0
-    }
+    private var numberOfPages = 0
     
     private func widthForTabAtIndex(index: Int) -> CGFloat {
-        return dataSource?.tabScrollView(self, widthForTabAtIndex: index) ?? 0
+        return cachedPageTabs[index]?.frame.width ?? 0
     }
     
     private func tabViewForPageAtIndex(index: Int) -> UIView? {
@@ -170,18 +168,29 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // scrolling
     public func scrollViewDidScroll(scrollView: UIScrollView) {
+        let currentIndex = properPageIndex()
+        
         if (scrollView == activeScrollView) {
+            let speed = self.frame.width / widthForTabAtIndex(currentIndex)
+            
+            let halfWidth = self.frame.width / 2
+            var tabsWidth: CGFloat = 0
+            var contentsWidth: CGFloat = 0
+            for i in 0 ..< currentIndex {
+                tabsWidth += widthForTabAtIndex(i)
+                contentsWidth += self.frame.width
+            }
+            
             if (scrollView == tabSectionScrollView) {
-                contentSectionScrollView.contentOffset.x = (tabSectionScrollView.contentOffset.x + tabSectionScrollView.contentInset.left) * (contentSectionScrollView.contentSize.width / tabSectionScrollView.contentSize.width) - contentSectionScrollView.contentInset.left
+                contentSectionScrollView.contentOffset.x = ((tabSectionScrollView.contentOffset.x + halfWidth - tabsWidth) * speed) + contentsWidth - halfWidth
             }
             
             if (scrollView == contentSectionScrollView) {
-                tabSectionScrollView.contentOffset.x = (contentSectionScrollView.contentOffset.x + contentSectionScrollView.contentInset.left) * (tabSectionScrollView.contentSize.width / contentSectionScrollView.contentSize.width) - tabSectionScrollView.contentInset.left
+                tabSectionScrollView.contentOffset.x = ((contentSectionScrollView.contentOffset.x + halfWidth - contentsWidth) / speed) + tabsWidth - halfWidth
             }
             updateTabAppearance()
         }
         
-        let currentIndex = properPageIndex()
         if (isStarted && pageIndex != currentIndex) {
             // set index
             pageIndex = currentIndex
@@ -249,6 +258,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
 
     private func setupPages() {
+        // reset number of pages
+        numberOfPages = dataSource?.numberOfPagesInTabScrollView(self) ?? 0
+        
         // clear all caches
         cachedPageTabs.removeAll()
         for subview in tabSectionScrollView.subviews {
@@ -281,7 +293,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     tabView.frame = CGRect(
                         x: tabSectionScrollViewContentWidth,
                         y: 0,
-                        width: widthForTabAtIndex(i),
+                        width: dataSource?.tabScrollView(self, widthForTabAtIndex: i) ?? 0,
                         height: tabSectionScrollView.frame.size.height)
                     // bind event
                     tabView.tag = i
