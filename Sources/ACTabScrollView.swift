@@ -127,23 +127,24 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // MARK: - Tab Clicking Control
     func tabViewDidClick(sensor: UITapGestureRecognizer) {
-        activeScrollView = tabSectionScrollView
+        activedScrollView = tabSectionScrollView
         moveToIndex(sensor.view!.tag, animated: true)
     }
     
     func tabSectionScrollViewDidClick(sensor: UITapGestureRecognizer) {
-        activeScrollView = tabSectionScrollView
+        activedScrollView = tabSectionScrollView
         moveToIndex(pageIndex, animated: true)
     }
     
     // MARK: - Scrolling Control
-    private var activeScrollView: UIScrollView?
+    private var activedScrollView: UIScrollView?
     
     // scrolling animation begin by dragging
     public func scrollViewWillBeginDragging(scrollView: UIScrollView) {
-        activeScrollView = scrollView
         // stop current scrolling before start another scrolling
         stopScrolling()
+        // set the activedScrollView
+        activedScrollView = scrollView
     }
     
     // scrolling animation stop with decelerating
@@ -170,7 +171,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     public func scrollViewDidScroll(scrollView: UIScrollView) {
         let currentIndex = currentPageIndex()
         
-        if (scrollView == activeScrollView) {
+        if (scrollView == activedScrollView) {
             let speed = self.frame.width / widthForTabAtIndex(currentIndex)
             let halfWidth = self.frame.width / 2
             
@@ -216,7 +217,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     public func changePageToIndex(index: Int, animated: Bool) {
-        activeScrollView = tabSectionScrollView
+        activedScrollView = tabSectionScrollView
         moveToIndex(index, animated: animated)
     }
     
@@ -349,8 +350,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 // force stop
                 stopScrolling()
                 
-                if (activeScrollView == nil || activeScrollView == tabSectionScrollView) {
-                    activeScrollView = contentSectionScrollView
+                if (activedScrollView == nil || activedScrollView == tabSectionScrollView) {
+                    activedScrollView = contentSectionScrollView
                     contentSectionScrollView.scrollRectToVisible(CGRect(
                         origin: CGPoint(x: self.frame.width * CGFloat(index), y: 0),
                         size: self.frame.size), animated: true)
