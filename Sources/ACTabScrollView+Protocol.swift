@@ -22,9 +22,6 @@ public protocol ACTabScrollViewDataSource {
     // get pages count
     func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int
     
-    // get the width of tab at index
-    func tabScrollView(tabScrollView: ACTabScrollView, widthForTabAtIndex index: Int) -> CGFloat
-    
     // get the tab at index
     func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView
     

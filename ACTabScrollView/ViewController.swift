@@ -18,12 +18,12 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
         tabScrollView.frame = self.view.frame
         self.view.addSubview(tabScrollView)
         
-        tabScrollView.defaultPage = 1
+        tabScrollView.defaultPageIndex = 1
+        tabScrollView.defaultTabSectionHeight = 60
         tabScrollView.pagingEnabled = true
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
         tabScrollView.cachePageLimit = 3
-        tabScrollView.defaultTabHeight = 60
     }
     
     // MARK: ACTabScrollViewDelegate
@@ -39,12 +39,9 @@ class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollView
         return 8
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, widthForTabAtIndex index: Int) -> CGFloat {
-        return (CGFloat(arc4random_uniform(5)) + 1) * 10
-    }
-    
     func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         let tabView = UIView()
+        tabView.frame.size = CGSize(width: (index + 1) * 10, height: (index + 1) * 5)
         
         switch (index % 3) {
         case 0:
