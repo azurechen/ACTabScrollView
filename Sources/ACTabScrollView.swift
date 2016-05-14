@@ -11,6 +11,7 @@
 //   2. Test reloadData function
 //   3. Init with frame
 //   4. Tabs in the bottom
+//   5. Add a arrow below tabs
 
 import UIKit
 
@@ -102,15 +103,15 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         isStarted = false
         stopScrolling()
         
+        // set custom attrs
+        self.tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
+        self.contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
+        
+        // first time setup pages
+        self.setupPages()
+        
         // async necessarily
         dispatch_async(dispatch_get_main_queue()) {
-            // set custom attrs
-            self.tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
-            self.contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
-            
-            // first time setup pages
-            self.setupPages()
-            
             // first time set defaule pageIndex
             self.initWithPageIndex(self.pageIndex ?? self.defaultPageIndex)
             self.isStarted = true
@@ -274,32 +275,40 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
         
         if (numberOfPages != 0) {
+            // cache tabs and get the max height
             var maxTabHeight: CGFloat = 0
-            
-            // setup tabs first, and set contents later (lazyLoadPages)
-            var tabSectionScrollViewContentWidth: CGFloat = 0
             for i in 0 ..< numberOfPages {
                 if let tabView = tabViewForPageAtIndex(i) {
-                    tabView.frame = CGRect(
-                        origin: CGPoint(
-                            x: tabSectionScrollViewContentWidth,
-                            y: tabSectionScrollView.frame.height - tabView.frame.height),
-                        size: tabView.frame.size)
                     // get max tab height
                     if (tabView.frame.height > maxTabHeight) {
                         maxTabHeight = tabView.frame.height
                     }
+                    cachedPageTabs[i] = tabView
+                }
+            }
+            
+            let tabSectionHeight = defaultTabSectionHeight ?? maxTabHeight
+            let contentSectionHeight = self.frame.size.height - tabSectionHeight
+            
+            // setup tabs first, and set contents later (lazyLoadPages)
+            var tabSectionScrollViewContentWidth: CGFloat = 0
+            for i in 0 ..< numberOfPages {
+                if let tabView = cachedPageTabs[i] {
+                    tabView.frame = CGRect(
+                        origin: CGPoint(
+                            x: tabSectionScrollViewContentWidth,
+                            y: tabSectionHeight - tabView.frame.height),
+                        size: tabView.frame.size)
+                    
                     // bind event
                     tabView.tag = i
                     tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
-                    cachedPageTabs[i] = tabView
                     tabSectionScrollView.addSubview(tabView)
                 }
                 tabSectionScrollViewContentWidth += widthForTabAtIndex(i)
             }
             
             // reset the fixed size of tab section
-            let tabSectionHeight = defaultTabSectionHeight ?? maxTabHeight
             tabSectionScrollView.frame = CGRect(x: 0, y: 0, width: self.frame.size.width, height: tabSectionHeight)
             tabSectionScrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabSectionScrollViewDidClick:"))
             tabSectionScrollView.contentInset = UIEdgeInsets(
@@ -310,7 +319,6 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             tabSectionScrollView.contentSize = CGSize(width: tabSectionScrollViewContentWidth, height: tabSectionHeight)
             
             // reset the fixed size of content section
-            let contentSectionHeight = self.frame.size.height - tabSectionHeight
             contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
         }
     }
