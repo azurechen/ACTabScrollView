@@ -75,6 +75,16 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         
+        initialize()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        initialize()
+    }
+    
+    private func initialize() {
         // init views
         tabSectionScrollView = UIScrollView()
         contentSectionScrollView = UIScrollView()
@@ -92,16 +102,14 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionScrollView.delegate = self
     }
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
     override public func layoutSubviews() {
         super.layoutSubviews()
         
         // reset status and stop scrolling immediately
-        isStarted = false
-        stopScrolling()
+        if (isStarted) {
+            isStarted = false
+            stopScrolling()
+        }
         
         // set custom attrs
         self.tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
