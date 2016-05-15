@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  DemoViewController.swift
 //  ACTabScrollView
 //
 //  Created by AzureChen on 2015/8/19.
@@ -8,22 +8,20 @@
 
 import UIKit
 
-class ViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource {
+class DemoViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource {
 
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tabScrollView.frame = self.view.frame
-        self.view.addSubview(tabScrollView)
-        
         tabScrollView.defaultPageIndex = 1
         tabScrollView.defaultTabSectionHeight = 60
         tabScrollView.pagingEnabled = true
+        tabScrollView.cachePageLimit = 3
+        
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
-        tabScrollView.cachePageLimit = 3
     }
     
     // MARK: ACTabScrollViewDelegate

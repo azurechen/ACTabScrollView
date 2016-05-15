@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		53887DDB1CE8AD3D001E6FD3 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53887DDA1CE8AD3D001E6FD3 /* DemoViewController.swift */; };
 		6DB0CD261B8462B90069AE39 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD251B8462B90069AE39 /* AppDelegate.swift */; };
-		6DB0CD281B8462B90069AE39 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD271B8462B90069AE39 /* ViewController.swift */; };
+		6DB0CD281B8462B90069AE39 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD271B8462B90069AE39 /* ExampleViewController.swift */; };
 		6DB0CD2B1B8462B90069AE39 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD291B8462B90069AE39 /* Main.storyboard */; };
 		6DB0CD2D1B8462B90069AE39 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD2C1B8462B90069AE39 /* Images.xcassets */; };
 		6DB0CD301B8462B90069AE39 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6DB0CD2E1B8462B90069AE39 /* LaunchScreen.xib */; };
@@ -28,10 +29,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		53887DDA1CE8AD3D001E6FD3 /* DemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 		6DB0CD201B8462B90069AE39 /* ACTabScrollView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ACTabScrollView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB0CD241B8462B90069AE39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6DB0CD251B8462B90069AE39 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		6DB0CD271B8462B90069AE39 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6DB0CD271B8462B90069AE39 /* ExampleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleViewController.swift; sourceTree = "<group>"; };
 		6DB0CD2A1B8462B90069AE39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6DB0CD2C1B8462B90069AE39 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		6DB0CD2F1B8462B90069AE39 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -83,7 +85,8 @@
 			isa = PBXGroup;
 			children = (
 				6DB0CD251B8462B90069AE39 /* AppDelegate.swift */,
-				6DB0CD271B8462B90069AE39 /* ViewController.swift */,
+				6DB0CD271B8462B90069AE39 /* ExampleViewController.swift */,
+				53887DDA1CE8AD3D001E6FD3 /* DemoViewController.swift */,
 				6DB0CD291B8462B90069AE39 /* Main.storyboard */,
 				6DB0CD2C1B8462B90069AE39 /* Images.xcassets */,
 				6DB0CD2E1B8462B90069AE39 /* LaunchScreen.xib */,
@@ -230,9 +233,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				98A418CC1CC8BE3700718CA2 /* ACTabScrollView+Protocol.swift in Sources */,
-				6DB0CD281B8462B90069AE39 /* ViewController.swift in Sources */,
+				6DB0CD281B8462B90069AE39 /* ExampleViewController.swift in Sources */,
 				6DB0CD471B8464FC0069AE39 /* ACTabScrollView.swift in Sources */,
 				6DB0CD261B8462B90069AE39 /* AppDelegate.swift in Sources */,
+				53887DDB1CE8AD3D001E6FD3 /* DemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
