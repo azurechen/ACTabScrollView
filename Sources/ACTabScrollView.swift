@@ -246,13 +246,13 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         if (numberOfPages != 0) {
             var tabOffsetX = 0 as CGFloat
             var contentOffsetX = 0 as CGFloat
-            for _ in 0 ..< index {
-                tabOffsetX += widthForTabAtIndex(index)
+            for i in 0 ..< index {
+                tabOffsetX += widthForTabAtIndex(i)
                 contentOffsetX += self.frame.width
             }
             // set default position of tabs and contents
-            tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX + tabSectionScrollView.contentInset.left * -1, y: tabSectionScrollView.contentOffset.y)
-            contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX  + contentSectionScrollView.contentInset.left * -1, y: contentSectionScrollView.contentOffset.y)
+            tabSectionScrollView.contentOffset = CGPoint(x: tabOffsetX - (self.frame.width - widthForTabAtIndex(index)) / 2, y: tabSectionScrollView.contentOffset.y)
+            contentSectionScrollView.contentOffset = CGPoint(x: contentOffsetX, y: contentSectionScrollView.contentOffset.y)
             updateTabAppearance(animated: false)
         }
     }
