@@ -15,7 +15,7 @@ class ExampleViewController: UIViewController, ACTabScrollViewDelegate, ACTabScr
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //tabScrollView.defaultPageIndex = 1
+        tabScrollView.defaultPageIndex = 3
         //tabScrollView.defaultTabSectionHeight = 40
         //tabScrollView.pagingEnabled = true
         //tabScrollView.cachePageLimit = 3
@@ -49,21 +49,18 @@ class ExampleViewController: UIViewController, ACTabScrollViewDelegate, ACTabScr
     }
     
     func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
-        let tabView = UIView()
-        tabView.frame.size = CGSize(width: (index + 1) * 10, height: (index + 1) * 5)
+        let categories = ["ENTERTAINMENT", "TECH", "SPORT", "ALL", "TRAVEL", "STYLE", "FEATURES", "VIDEO"]
         
-        switch (index % 3) {
-        case 0:
-            tabView.backgroundColor = UIColor.redColor()
-        case 1:
-            tabView.backgroundColor = UIColor.greenColor()
-        case 2:
-            tabView.backgroundColor = UIColor.blueColor()
-        default:
-            break
-        }
+        // create a label
+        let label = UILabel()
+        label.text = categories[index]
+        label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightThin)
+        label.textColor = UIColor(red: 77.0 / 255, green: 79.0 / 255, blue: 84.0 / 255, alpha: 1)
+        label.textAlignment = .Center
+        label.sizeToFit()
+        label.frame.size = CGSize(width: label.frame.size.width + 28, height: label.frame.size.height + 36)
         
-        return tabView
+        return label
     }
     
     func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
