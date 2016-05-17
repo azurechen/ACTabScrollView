@@ -310,6 +310,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                     
                     // bind event
                     tabView.tag = i
+                    tabView.userInteractionEnabled = true
                     tabView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tabViewDidClick:"))
                     tabSectionScrollView.addSubview(tabView)
                 }
