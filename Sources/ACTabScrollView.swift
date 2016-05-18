@@ -37,6 +37,8 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     // MARK: Private Variables
     private var tabSectionScrollView: UIScrollView!
     private var contentSectionScrollView: UIScrollView!
+    private var arrowView: ArrowView!
+    
     private var cachedPageTabs: [Int: UIView] = [:]
     private var cachedPageContents: CacheQueue<Int, UIView> = CacheQueue()
     private var realCachePageLimit: Int {
@@ -88,8 +90,11 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         // init views
         tabSectionScrollView = UIScrollView()
         contentSectionScrollView = UIScrollView()
+        arrowView = ArrowView(frame: CGRect(x: 0, y: 0, width: 30, height: 10))
+        
         self.addSubview(tabSectionScrollView)
         self.addSubview(contentSectionScrollView)
+        self.addSubview(arrowView)
         
         tabSectionScrollView.pagingEnabled = false
         tabSectionScrollView.showsHorizontalScrollIndicator = false
@@ -112,11 +117,12 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         }
         
         // set custom attrs
-        self.tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
-        self.contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
+        tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
+        contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
+        arrowView.arrorBackgroundColor = self.tabSectionBackgroundColor
         
         // first time setup pages
-        self.setupPages()
+        setupPages()
         
         // async necessarily
         dispatch_async(dispatch_get_main_queue()) {
@@ -329,6 +335,9 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
             
             // reset the fixed size of content section
             contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
+            
+            // reset the origin of arrow view
+            arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
         }
     }
     
@@ -474,6 +483,45 @@ public struct CacheQueue<Key: Hashable, Value> {
     mutating func removeAll() {
         keys.removeAll()
         values.removeAll()
+    }
+    
+}
+
+class ArrowView : UIView {
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        self.backgroundColor = UIColor.clearColor()
+    }
+    
+    var rect: CGRect!
+    var arrorBackgroundColor: UIColor?
+    
+    var midX: CGFloat { return CGRectGetMidX(rect) }
+    var midY: CGFloat { return CGRectGetMidY(rect) }
+    var maxX: CGFloat { return CGRectGetMaxX(rect) }
+    var maxY: CGFloat { return CGRectGetMaxY(rect) }
+    
+    override func drawRect(rect: CGRect) {
+        self.rect = rect
+        
+        let ctx = UIGraphicsGetCurrentContext()
+        
+        CGContextBeginPath(ctx)
+        CGContextMoveToPoint(ctx, 0, 0)
+        CGContextAddQuadCurveToPoint(ctx, maxX * 0.12, 0, maxX * 0.2, maxY * 0.2)
+        CGContextAddLineToPoint(ctx, midX - maxX * 0.05, maxY * 0.9)
+        CGContextAddQuadCurveToPoint(ctx, midX, maxY, midX + maxX * 0.05, maxY * 0.9)
+        CGContextAddLineToPoint(ctx, maxX * 0.8, maxY * 0.2)
+        CGContextAddQuadCurveToPoint(ctx, maxX * 0.88, 0, maxX, 0)
+        CGContextClosePath(ctx)
+        
+        CGContextSetFillColorWithColor(ctx, arrorBackgroundColor?.CGColor)
+        CGContextFillPath(ctx);
     }
     
 }
