@@ -30,6 +30,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     @IBInspectable public var defaultPageIndex: Int = 0
     @IBInspectable public var defaultTabSectionHeight: CGFloat?
+    @IBInspectable public var arrowIndicator: Bool = false
     
     public var delegate: ACTabScrollViewDelegate?
     public var dataSource: ACTabScrollViewDataSource?
@@ -120,6 +121,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
         contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
         arrowView.arrorBackgroundColor = self.tabSectionBackgroundColor
+        arrowView.hidden = !arrowIndicator
         
         // first time setup pages
         setupPages()

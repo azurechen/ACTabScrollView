@@ -16,6 +16,7 @@ class ExampleViewController: UIViewController, ACTabScrollViewDelegate, ACTabScr
         super.viewDidLoad()
         
         tabScrollView.defaultPageIndex = 3
+        tabScrollView.arrowIndicator = true
         //tabScrollView.defaultTabSectionHeight = 40
         //tabScrollView.pagingEnabled = true
         //tabScrollView.cachePageLimit = 3
