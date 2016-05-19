@@ -11,7 +11,7 @@
 //   2. Test reloadData function
 //   3. Init with frame
 //   4. Tabs in the bottom
-//   5. Add a arrow below tabs
+//   5. IBDesignable in Storyboard
 
 import UIKit
 

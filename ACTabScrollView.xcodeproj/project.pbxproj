@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		530068331CEDDE7600A80F09 /* ContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 530068321CEDDE7600A80F09 /* ContentViewController.swift */; };
 		53887DDB1CE8AD3D001E6FD3 /* DemoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 53887DDA1CE8AD3D001E6FD3 /* DemoViewController.swift */; };
 		6DB0CD261B8462B90069AE39 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD251B8462B90069AE39 /* AppDelegate.swift */; };
 		6DB0CD281B8462B90069AE39 /* ExampleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DB0CD271B8462B90069AE39 /* ExampleViewController.swift */; };
@@ -29,6 +30,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		530068321CEDDE7600A80F09 /* ContentViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentViewController.swift; sourceTree = "<group>"; };
 		53887DDA1CE8AD3D001E6FD3 /* DemoViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DemoViewController.swift; sourceTree = "<group>"; };
 		6DB0CD201B8462B90069AE39 /* ACTabScrollView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ACTabScrollView.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DB0CD241B8462B90069AE39 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			children = (
 				6DB0CD251B8462B90069AE39 /* AppDelegate.swift */,
 				6DB0CD271B8462B90069AE39 /* ExampleViewController.swift */,
+				530068321CEDDE7600A80F09 /* ContentViewController.swift */,
 				53887DDA1CE8AD3D001E6FD3 /* DemoViewController.swift */,
 				6DB0CD291B8462B90069AE39 /* Main.storyboard */,
 				6DB0CD2C1B8462B90069AE39 /* Images.xcassets */,
@@ -236,6 +239,7 @@
 				6DB0CD281B8462B90069AE39 /* ExampleViewController.swift in Sources */,
 				6DB0CD471B8464FC0069AE39 /* ACTabScrollView.swift in Sources */,
 				6DB0CD261B8462B90069AE39 /* AppDelegate.swift in Sources */,
+				530068331CEDDE7600A80F09 /* ContentViewController.swift in Sources */,
 				53887DDB1CE8AD3D001E6FD3 /* DemoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

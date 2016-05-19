@@ -5,6 +5,51 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
     </dependencies>
     <scenes>
+        <!--Content View Controller-->
+        <scene sceneID="bBX-AD-qtq">
+            <objects>
+                <viewController storyboardIdentifier="ContentViewController" id="WrF-c2-0aN" customClass="ContentViewController" customModule="ACTabScrollView" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="wWF-G9-sRL"/>
+                        <viewControllerLayoutGuide type="bottom" id="iOC-Ne-3sk"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="yG8-jP-NP4">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Kcx-bH-Jo8">
+                                <rect key="frame" x="0.0" y="20" width="600" height="48"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j5d-s1-WJY">
+                                        <rect key="frame" x="24" y="13" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.23921568627450979" green="0.25882352941176467" blue="0.30196078431372547" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstItem="j5d-s1-WJY" firstAttribute="centerY" secondItem="Kcx-bH-Jo8" secondAttribute="centerY" id="Qza-IO-iJg"/>
+                                    <constraint firstAttribute="height" constant="48" id="UI4-iw-Hal"/>
+                                    <constraint firstItem="j5d-s1-WJY" firstAttribute="leading" secondItem="Kcx-bH-Jo8" secondAttribute="leading" constant="24" id="emi-Ow-AoG"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="Kcx-bH-Jo8" secondAttribute="trailing" id="32f-1Y-xew"/>
+                            <constraint firstItem="Kcx-bH-Jo8" firstAttribute="top" secondItem="wWF-G9-sRL" secondAttribute="bottom" id="I5j-GH-si9"/>
+                            <constraint firstItem="Kcx-bH-Jo8" firstAttribute="leading" secondItem="yG8-jP-NP4" secondAttribute="leading" id="biv-yq-j5l"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="headerLabel" destination="j5d-s1-WJY" id="3y1-g6-VLY"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wB4-U7-ZoC" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="476" y="1024"/>
+        </scene>
         <!--News-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -94,7 +139,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="feR-MX-GuE" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-253" y="1024"/>
+            <point key="canvasLocation" x="-253" y="-504"/>
         </scene>
     </scenes>
 </document>
