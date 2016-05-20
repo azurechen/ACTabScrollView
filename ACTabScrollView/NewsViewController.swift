@@ -12,7 +12,6 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
 
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     
-    let categories = ["Entertainment", "Tech", "Sport", "All", "Travel", "Style", "Features", "Video"]
     var contentViews: [UIView] = []
     
     override func viewDidLoad() {
@@ -30,10 +29,12 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         
         // create content views
         let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
-        for i in 0 ..< categories.count {
+        for category in NewsCategory.allValues() {
             let vc = storyboard.instantiateViewControllerWithIdentifier("ContentViewController") as! ContentViewController
+            vc.category = category
+            
+            addChildViewController(vc)
             contentViews.append(vc.view)
-            vc.headerLabel.text = categories[i] == "All" ? "Today" : "Today's \(categories[i])"
         }
         
         // set navigation bar appearance
@@ -64,7 +65,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         // create a label
         let label = UILabel()
-        label.text = categories[index].uppercaseString
+        label.text = String(NewsCategory.allValues()[index]).uppercaseString
         label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightThin)
         label.textColor = UIColor(red: 77.0 / 255, green: 79.0 / 255, blue: 84.0 / 255, alpha: 1)
         label.textAlignment = .Center

@@ -8,30 +8,61 @@
 
 import UIKit
 
-class ContentViewController: UIViewController {
+class ContentViewController: UIViewController, UITableViewDataSource {
 
     @IBOutlet weak var headerLabel: UILabel!
+    @IBOutlet weak var tableView: UITableView!
+    
+    var category: NewsCategory? {
+        didSet {
+            for news in MockData.newsArray {
+                if (news.category == category || category == .All) {
+                    if (news.section == .Today) {
+                        todayNews.append(news)
+                    } else if (news.section == .Yesterday) {
+                        yesterdayNews.append(news)
+                    }
+                }
+            }
+        }
+    }
+    var todayNews: [News] = []
+    var yesterdayNews: [News] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 44
+        tableView.dataSource = self
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 2
     }
-    */
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return section == 0 ? todayNews.count : yesterdayNews.count
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        let news = indexPath.section == 0 ? todayNews[indexPath.row] : yesterdayNews[indexPath.row]
+        
+        // get cell
+        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! ContentTableViewCell
+        cell.titleLabel.text = news.title
+        return cell
+    }
 
+}
+
+class ContentTableViewCell: UITableViewCell {
+    
+    @IBOutlet weak var thumbnailImageView: UIImageView!
+    @IBOutlet weak var titleLabel: UILabel!
+    
+    override func awakeFromNib() {
+        self.selectionStyle = .None
+    }
+    
 }
