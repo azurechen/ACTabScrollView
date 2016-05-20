@@ -1,5 +1,5 @@
 //
-//  ExampleViewController.swift
+//  NewsViewController.swift
 //  ACTabScrollView
 //
 //  Created by AzureChen on 2015/8/19.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ExampleViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource {
+class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScrollViewDataSource {
 
     @IBOutlet weak var tabScrollView: ACTabScrollView!
     
