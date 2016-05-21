@@ -87,6 +87,7 @@
                                                 <constraint firstItem="rtq-l3-kbv" firstAttribute="top" secondItem="Nbr-9R-GKx" secondAttribute="bottom" constant="4" id="fTr-sB-1yM"/>
                                                 <constraint firstItem="Nbr-9R-GKx" firstAttribute="top" secondItem="bce-q3-Y8c" secondAttribute="topMargin" constant="16" id="fUX-uV-eNW"/>
                                                 <constraint firstItem="jWQ-hc-pl0" firstAttribute="top" secondItem="bce-q3-Y8c" secondAttribute="topMargin" constant="4" id="grW-re-FIc"/>
+                                                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="jWQ-hc-pl0" secondAttribute="bottom" constant="18" id="oaz-dc-PIy"/>
                                                 <constraint firstItem="jWQ-hc-pl0" firstAttribute="top" secondItem="bce-q3-Y8c" secondAttribute="top" constant="20" id="ytx-o4-TcY"/>
                                             </constraints>
                                             <variation key="default">

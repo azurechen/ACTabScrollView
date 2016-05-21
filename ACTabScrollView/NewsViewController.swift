@@ -59,7 +59,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     
     // MARK: ACTabScrollViewDataSource
     func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int {
-        return 8
+        return NewsCategory.allValues().count
     }
     
     func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
