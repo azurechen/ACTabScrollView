@@ -49,6 +49,7 @@ class ContentViewController: UIViewController, UITableViewDelegate, UITableViewD
         cell.thumbnailImageView.layer.cornerRadius = 4
         cell.titleLabel.text = news.title
         cell.categoryLabel.text = String(news.category)
+        cell.categoryView.layer.backgroundColor = UIColor.whiteColor().CGColor
         cell.categoryView.layer.cornerRadius = 4
         cell.categoryView.layer.borderWidth = 1
         cell.categoryView.layer.borderColor = UIColor(red: 238.0 / 255, green: 238.0 / 255, blue: 238.0 / 255, alpha: 1.0).CGColor

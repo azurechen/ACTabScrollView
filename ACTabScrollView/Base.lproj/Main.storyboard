@@ -62,7 +62,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                                     <constraints>
                                                         <constraint firstItem="YZq-CT-JLB" firstAttribute="leading" secondItem="rtq-l3-kbv" secondAttribute="leading" constant="8" id="M9j-sG-omR"/>
                                                         <constraint firstAttribute="trailing" secondItem="YZq-CT-JLB" secondAttribute="trailing" constant="8" id="jG3-5V-4Cx"/>
@@ -103,6 +103,7 @@
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.98039215686274506" green="0.98039215686274506" blue="0.98039215686274506" alpha="1" colorSpace="calibratedRGB"/>
                                         <connections>
                                             <outlet property="categoryLabel" destination="YZq-CT-JLB" id="0rM-Ci-0Rp"/>
                                             <outlet property="categoryView" destination="rtq-l3-kbv" id="JzZ-9j-qkn"/>
