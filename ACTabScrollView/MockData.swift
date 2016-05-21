@@ -11,8 +11,8 @@ import UIKit
 class MockData {
 
     static let newsArray = [
-        News(category: .Entertainment, title: "'Game of Thrones' Kit Harington on falling in love with co-star", section: .Today),
-        News(category: .Entertainment, title: "Happy 30th anniversary 'Top Gun'!", section: .Yesterday),
+        News(id: 1, category: .Entertainment, title: "'Game of Thrones' Kit Harington on falling in love with co-star"),
+        News(id: 5, category: .Entertainment, title: "Happy 30th anniversary 'Top Gun'!"),
     ]
     
 }
@@ -32,13 +32,8 @@ enum NewsCategory {
     }
 }
 
-enum NewsSection {
-    case Yesterday
-    case Today
-}
-
 struct News {
+    let id: Int
     let category: NewsCategory
     let title: String
-    let section: NewsSection
 }
