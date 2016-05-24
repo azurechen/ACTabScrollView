@@ -17,12 +17,15 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set ACTabScrollView, all following settings are optional
+        // set ACTabScrollView, all the following settings are optional
         tabScrollView.defaultPageIndex = 3
         tabScrollView.arrowIndicator = true
-//        tabScrollView.defaultTabSectionHeight = 40
-//        tabScrollView.pagingEnabled = true
+//        tabScrollView.tabGradient = true
+//        tabScrollView.tabSectionBackgroundColor = UIColor.whiteColor()
+//        tabScrollView.contentSectionBackgroundColor = UIColor.whiteColor()
 //        tabScrollView.cachePageLimit = 3
+//        tabScrollView.pagingEnabled = true
+//        tabScrollView.defaultTabSectionHeight = 40
         
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
