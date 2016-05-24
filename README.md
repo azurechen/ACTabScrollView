@@ -6,9 +6,9 @@ A fancy `pager` UI extends `UIScrollView` with elegant, smooth and synchronized 
 DEMO
 ----
 
-<img src="./screenshots/demo-1.gif" width = "288" alt="Demo" />
-<img src="./screenshots/demo-2.gif" width = "288" alt="Demo" />
-<img src="./screenshots/demo-3.gif" width = "288" alt="Demo" />
+<img src="./Screenshots/demo-1.gif" width = "288" alt="Demo" />
+<img src="./Screenshots/demo-2.gif" width = "288" alt="Demo" />
+<img src="./Screenshots/demo-3.gif" width = "288" alt="Demo" />
 
 User can interact with this UI by some different gestures. The `tabs` and `pages` will scroll `synchronously`.
 
