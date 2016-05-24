@@ -15,10 +15,10 @@ class DemoViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tabScrollView.defaultPageIndex = 1
-        tabScrollView.defaultTabSectionHeight = 60
+        tabScrollView.defaultPage = 1
+        tabScrollView.tabSectionHeight = 60
         tabScrollView.pagingEnabled = true
-        tabScrollView.cachePageLimit = 3
+        tabScrollView.cachedPageLimit = 3
         
         tabScrollView.delegate = self
         tabScrollView.dataSource = self

@@ -18,14 +18,14 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         super.viewDidLoad()
         
         // set ACTabScrollView, all the following settings are optional
-        tabScrollView.defaultPageIndex = 3
+        tabScrollView.defaultPage = 3
         tabScrollView.arrowIndicator = true
-//        tabScrollView.tabGradient = true
+//        tabScrollView.tabSectionHeight = 40
 //        tabScrollView.tabSectionBackgroundColor = UIColor.whiteColor()
 //        tabScrollView.contentSectionBackgroundColor = UIColor.whiteColor()
-//        tabScrollView.cachePageLimit = 3
+//        tabScrollView.tabGradient = true
 //        tabScrollView.pagingEnabled = true
-//        tabScrollView.defaultTabSectionHeight = 40
+//        tabScrollView.cachedPageLimit = 3
         
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
