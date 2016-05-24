@@ -20,7 +20,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     // MARK: Public Variables
     @IBInspectable public var defaultPage: Int = 0
-    @IBInspectable public var tabSectionHeight: CGFloat?
+    @IBInspectable public var tabSectionHeight: CGFloat = -1
     @IBInspectable public var tabSectionBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable public var contentSectionBackgroundColor: UIColor = UIColor.whiteColor()
     @IBInspectable public var tabGradient: Bool = true
@@ -139,7 +139,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     override public func prepareForInterfaceBuilder() {
         let textColor = UIColor(red: 203.0 / 255, green: 203.0 / 255, blue: 203.0 / 255, alpha: 1.0)
-        let tabSectionHeight = self.tabSectionHeight ?? 64
+        let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : 64
         
         let tabSectionLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: tabSectionHeight))
         let contentSectionLabel = UILabel(frame: CGRect(x: 0, y: tabSectionHeight + 1, width: self.frame.width, height: self.frame.height - tabSectionHeight - 1))
@@ -334,7 +334,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
                 }
             }
             
-            let tabSectionHeight = self.tabSectionHeight ?? maxTabHeight
+            let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : maxTabHeight
             let contentSectionHeight = self.frame.size.height - tabSectionHeight
             
             // setup tabs first, and set contents later (lazyLoadPages)
