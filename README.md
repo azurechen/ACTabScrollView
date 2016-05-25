@@ -1,7 +1,7 @@
 ACTabScrollView
 ===============
 
-A fancy `pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrolling `tabs`.
+A fancy `pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrollable `tabs`.
 
 DEMO
 ----
