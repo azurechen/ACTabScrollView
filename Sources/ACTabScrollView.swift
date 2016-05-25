@@ -141,6 +141,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         let textColor = UIColor(red: 203.0 / 255, green: 203.0 / 255, blue: 203.0 / 255, alpha: 1.0)
         let tabSectionHeight = self.tabSectionHeight >= 0 ? self.tabSectionHeight : 64
         
+        // labels
         let tabSectionLabel = UILabel(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: tabSectionHeight))
         let contentSectionLabel = UILabel(frame: CGRect(x: 0, y: tabSectionHeight + 1, width: self.frame.width, height: self.frame.height - tabSectionHeight - 1))
         
@@ -155,6 +156,7 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
         contentSectionLabel.backgroundColor = contentSectionBackgroundColor
         
+        // rect and seperator
         let rectView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height))
         rectView.layer.borderWidth = 1
         rectView.layer.borderColor = textColor.CGColor
@@ -162,10 +164,15 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         let seperatorView = UIView(frame: CGRect(x: 0, y: tabSectionHeight, width: self.frame.width, height: 1))
         seperatorView.backgroundColor = textColor
         
+        // arrow
+        arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
+        
+        // add subviews
         self.addSubview(tabSectionLabel)
         self.addSubview(contentSectionLabel)
         self.addSubview(rectView)
         self.addSubview(seperatorView)
+        self.addSubview(arrowView)
     }
     
     // MARK: - Tab Clicking Control
