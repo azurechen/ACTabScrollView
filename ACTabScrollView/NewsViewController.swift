@@ -17,7 +17,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // set ACTabScrollView, all the following settings are optional
+        // set ACTabScrollView, all the following properties are optional
         tabScrollView.defaultPage = 3
         tabScrollView.arrowIndicator = true
 //        tabScrollView.tabSectionHeight = 40
@@ -30,13 +30,13 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         tabScrollView.delegate = self
         tabScrollView.dataSource = self
         
-        // create content views
+        // create content views from storyboard
         let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
         for category in NewsCategory.allValues() {
             let vc = storyboard.instantiateViewControllerWithIdentifier("ContentViewController") as! ContentViewController
             vc.category = category
             
-            addChildViewController(vc)
+            addChildViewController(vc) // don't forget, it's very important
             contentViews.append(vc.view)
         }
         
@@ -72,8 +72,10 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightThin)
         label.textColor = UIColor(red: 77.0 / 255, green: 79.0 / 255, blue: 84.0 / 255, alpha: 1)
         label.textAlignment = .Center
-        label.sizeToFit()
-        label.frame.size = CGSize(width: label.frame.size.width + 28, height: label.frame.size.height + 36)
+        
+        // if the size of your tab is not fixed, you can adjust the size by the following way.
+        label.sizeToFit() // resize the label to the size of content
+        label.frame.size = CGSize(width: label.frame.size.width + 28, height: label.frame.size.height + 36) // add some paddings
         
         return label
     }
