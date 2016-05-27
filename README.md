@@ -132,3 +132,33 @@ The usage tutorial is finished, you can see more details and example at `ACTabSc
 
 How to Install
 --------------
+
+###CocoaPods
+
+If you didn't use [CocoaPods](http://cocoapods.org) before, install it first.
+
+```bash
+$ gem install cocoapods
+$ pod setup
+```
+
+Create a file named `Podfile` in your project folder if this file doesn't exist. And append the following line into your `Podfile`.
+
+```Swift
+pod 'ACTabScrollView', :git => 'https://github.com/azurechen/ACTabScrollView.git'
+```
+
+Then, run this command. 🎉
+
+```bash
+$ pod install
+```
+
+###Manual
+
+Drag these two files into your project.
+
+* `Sources/ACTabScrollView.swift`
+* `Sources/ACTabScrollView+Protocol.swift`
+
+And you can use `ACTabScrollView`. 🎉
