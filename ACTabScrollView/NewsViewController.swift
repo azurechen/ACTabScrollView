@@ -69,7 +69,11 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         // create a label
         let label = UILabel()
         label.text = String(NewsCategory.allValues()[index]).uppercaseString
-        label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightThin)
+        if #available(iOS 8.2, *) {
+            label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightThin)
+        } else {
+            label.font = UIFont.systemFontOfSize(16)
+        }
         label.textColor = UIColor(red: 77.0 / 255, green: 79.0 / 255, blue: 84.0 / 255, alpha: 1)
         label.textAlignment = .Center
         

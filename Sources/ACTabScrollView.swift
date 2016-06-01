@@ -148,12 +148,20 @@ public class ACTabScrollView: UIView, UIScrollViewDelegate {
         tabSectionLabel.text = "Tab Section"
         tabSectionLabel.textColor = textColor
         tabSectionLabel.textAlignment = .Center
-        tabSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
+        if #available(iOS 8.2, *) {
+            tabSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
+        } else {
+            tabSectionLabel.font = UIFont.systemFontOfSize(27)
+        }
         tabSectionLabel.backgroundColor = tabSectionBackgroundColor
         contentSectionLabel.text = "Content Section"
         contentSectionLabel.textColor = textColor
         contentSectionLabel.textAlignment = .Center
-        contentSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
+        if #available(iOS 8.2, *) {
+            contentSectionLabel.font = UIFont.systemFontOfSize(27, weight: UIFontWeightHeavy)
+        } else {
+            contentSectionLabel.font = UIFont.systemFontOfSize(27)
+        }
         contentSectionLabel.backgroundColor = contentSectionBackgroundColor
         
         // rect and seperator

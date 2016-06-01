@@ -68,7 +68,11 @@ class ContentViewController: UIViewController, UITableViewDelegate, UITableViewD
         let label = UILabel()
         label.text = "Today"
         label.textColor = UIColor.whiteColor()
-        label.font = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
+        if #available(iOS 8.2, *) {
+            label.font = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
+        } else {
+            label.font = UIFont.systemFontOfSize(17)
+        }
         label.sizeToFit()
         label.frame.origin = CGPoint(x: 18, y: 13)
         
