@@ -181,7 +181,7 @@
 			attributes = {
 				LastSwiftMigration = 0700;
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = AzureChen;
 				TargetAttributes = {
 					6DB0CD1F1B8462B90069AE39 = {
@@ -307,6 +307,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -376,7 +377,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ACTabScrollView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
 				PRODUCT_NAME = ACTabScrollView;
@@ -391,7 +391,6 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = ACTabScrollView/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
 				PRODUCT_NAME = ACTabScrollView;
@@ -413,6 +412,7 @@
 				);
 				INFOPLIST_FILE = ACTabScrollViewTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.azurechen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ACTabScrollView;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ACTabScrollView.app/ACTabScrollView";
 			};
@@ -428,6 +428,7 @@
 				);
 				INFOPLIST_FILE = ACTabScrollViewTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.azurechen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ACTabScrollView;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ACTabScrollView.app/ACTabScrollView";
 			};
