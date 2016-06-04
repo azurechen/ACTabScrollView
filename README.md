@@ -3,8 +3,9 @@ ACTabScrollView
 
 [![CocoaPods](https://img.shields.io/cocoapods/p/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
 [![CocoaPods](https://img.shields.io/cocoapods/v/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
-[![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
-[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/azurechen/ACTabScrollView/blob/master/LICENSE.md)
+[![iOS 7.0+](https://img.shields.io/badge/iOS-7.0+-green.svg?style=flat)](https://developer.apple.com/ios/)
+[![Swift 2.0+](https://img.shields.io/badge/Swift-2.0+-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/azurechen/ACTabScrollView/blob/master/LICENSE.md)
 
 
 
