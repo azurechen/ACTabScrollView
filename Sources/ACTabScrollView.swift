@@ -11,7 +11,8 @@
 //   2. Test reloadData function
 //   3. Init with frame
 //   4. Tabs in the bottom
-//   5. IBDesignable in Storyboard
+//   5. Bottom line or shadow
+//   6. Support Cartage
 
 import UIKit
 
