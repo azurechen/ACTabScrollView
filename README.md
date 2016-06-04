@@ -3,13 +3,13 @@ ACTabScrollView
 
 [![CocoaPods](https://img.shields.io/cocoapods/p/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
 [![CocoaPods](https://img.shields.io/cocoapods/v/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
-[![iOS 7.0+](https://img.shields.io/badge/iOS-7.0+-green.svg?style=flat)](https://developer.apple.com/ios/)
-[![Swift 2.0+](https://img.shields.io/badge/Swift-2.0+-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![iOS 7.0+](https://img.shields.io/badge/ios-7.0+-green.svg?style=flat)](https://developer.apple.com/ios/)
+[![Swift 2.0+](https://img.shields.io/badge/swift-2.0+-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/azurechen/ACTabScrollView/blob/master/LICENSE.md)
 
 
 
-A fancy `pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrolling `tabs`.
+A fancy `Menu` and `Pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrolling `tabs`.
 
 DEMO
 ----
@@ -51,6 +51,7 @@ All the following properties are `optional`. It provides more flexibility to cus
 override func viewDidLoad() {
     super.viewDidLoad()
     
+    // all the following properties are optional
     tabScrollView.defaultPage = 3
     tabScrollView.arrowIndicator = true
     tabScrollView.tabSectionHeight = 40
@@ -170,6 +171,15 @@ Drag these two files into your project.
 * `Sources/ACTabScrollView+Protocol.swift`
 
 And you can use `ACTabScrollView`. 🎉
+
+Inspiration
+-----------
+
+The [Stackoverflow Question](http://stackoverflow.com/questions/26831662/creation-of-a-horizontal-infinite-scrolling-menu-bar-in-ios) inspired me to create this repo. Although `ACTabScrollView` does not implement all the features it mentions, such as `Infinite Scrolling`, I will keep to implement that. But the idea give me a motivation to do something, and brought `ACTabScrollView` here.
+
+I use the UI from that question as examples in this project, because that is the best sample to show this concept, and only as an example. I always want to know what the app is but I still don't figure out.
+
+If you create the app and you don't like me to use it as an example. Contact me and I will immediately remove that. Or I can mention you and your work at README and example files. Thank you very much!
 
 License
 -------

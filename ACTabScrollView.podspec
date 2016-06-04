@@ -2,10 +2,10 @@ Pod::Spec.new do |s|
 
   s.name         = "ACTabScrollView"
   s.version      = "0.2.4"
-  s.summary      = "A fancy pager UI extends UIScrollView with elegant, smooth and synchronized scrollable tabs."
+  s.summary      = "A fancy `Menu` and `Pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrolling `tabs`."
 
   s.description  = <<-DESC
-                   A fancy pager UI extends UIScrollView with elegant, smooth and synchronized scrollable tabs.
+                   A fancy `Menu` and `Pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrolling `tabs`.
                    DESC
 
   s.homepage     = "https://github.com/azurechen/ACTabScrollView"
