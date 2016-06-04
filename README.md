@@ -1,6 +1,13 @@
 ACTabScrollView
 ===============
 
+[![CocoaPods](https://img.shields.io/cocoapods/p/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
+[![CocoaPods](https://img.shields.io/cocoapods/v/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
+[![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/azurechen/ACTabScrollView/blob/master/LICENSE.md)
+
+
+
 A fancy `pager` UI extends `UIScrollView` with elegant, smooth and synchronized scrolling `tabs`.
 
 DEMO
@@ -162,3 +169,16 @@ Drag these two files into your project.
 * `Sources/ACTabScrollView+Protocol.swift`
 
 And you can use `ACTabScrollView`. 🎉
+
+License
+-------
+
+The MIT License (MIT)
+
+Copyright (c) 2016 Azure Chen
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
