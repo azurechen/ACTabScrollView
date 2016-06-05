@@ -153,7 +153,7 @@ $ pod setup
 
 Create a file named `Podfile` in your project folder if this file doesn't exist. And append the following line into your `Podfile`.
 
-```Swift
+```bash
 pod 'ACTabScrollView', :git => 'https://github.com/azurechen/ACTabScrollView.git'
 ```
 
