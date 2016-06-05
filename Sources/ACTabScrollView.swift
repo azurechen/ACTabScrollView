@@ -9,10 +9,9 @@
 //  TODO:
 //   1. Performace improvement
 //   2. Test reloadData function
-//   3. Init with frame
-//   4. Tabs in the bottom
-//   5. Bottom line or shadow
-//   6. Support Cartage
+//   3. Tabs in the bottom
+//   4. Bottom line or shadow
+//   5. Support Carthage
 
 import UIKit
 
