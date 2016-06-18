@@ -5,6 +5,7 @@ ACTabScrollView
 [![CocoaPods](https://img.shields.io/cocoapods/v/ACTabScrollView.svg)](http://cocoapods.org/pods/ACTabScrollView)
 [![iOS 7.0+](https://img.shields.io/badge/ios-7.0+-green.svg?style=flat)](https://developer.apple.com/ios/)
 [![Swift 2.0+](https://img.shields.io/badge/swift-2.0+-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Objective-C 2.0+](https://img.shields.io/badge/objective--c-2.0+-red.svg?style=flat)](https://developer.apple.com/reference/objectivec)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/azurechen/ACTabScrollView/blob/master/LICENSE.md)
 
 
@@ -29,7 +30,7 @@ You can also use `changePageToIndex` method to scroll pages programmatically.
 Usage
 -----
 
-###Add an Object of ACTabScrollView
+###Add an Object of `ACTabScrollView`
 
 Drag a `UIView` object  onto the Interface Builder and set the `Class` to extends `ACTabScrollView ` in `XIB` or `Storyboard`.
 
@@ -138,6 +139,43 @@ func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex ind
 ```
 
 The usage tutorial is finished, you can see more details and example at `ACTabScrollView/NewsViewController.swift`
+
+###Using `ACTabScrollView` in `Objective-C` Project
+
+It is very very easy if you use the newest version of Xcode.
+
+First, import the automatically generated header `ACTabScrollView-Swift.h` in your `.m` file.
+
+```objective-c
+#import "ACTabScrollView-Swift.h"
+```
+
+This header is generated automatically, you don't need to change any setting.
+
+And try to use `ACTabScrollView` in your `ViewController.m`
+
+```objective-c
+#import "ViewController.h"
+#import "ACTabScrollView-Swift.h"
+
+@interface ViewController ()
+@end
+
+@implementation ViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    
+    ACTabScrollView *tabScrollView = [[ACTabScrollView alloc] init];
+    
+    tabScrollView.defaultPage = 3;
+    tabScrollView.arrowIndicator = true;
+}
+
+@end
+```
+
+Enjoy `ACTabScrollView` in your Objective-C project. 🎉
 
 How to Install
 --------------
