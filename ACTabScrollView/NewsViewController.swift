@@ -31,9 +31,9 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         tabScrollView.dataSource = self
         
         // create content views from storyboard
-        let storyboard = UIStoryboard(name: "Main", bundle: NSBundle.mainBundle())
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         for category in NewsCategory.allValues() {
-            let vc = storyboard.instantiateViewControllerWithIdentifier("ContentViewController") as! ContentViewController
+            let vc = storyboard.instantiateViewController(withIdentifier: "ContentViewController") as! ContentViewController
             vc.category = category
             
             addChildViewController(vc) // don't forget, it's very important
@@ -42,40 +42,40 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         
         // set navigation bar appearance
         if let navigationBar = self.navigationController?.navigationBar {
-            navigationBar.translucent = false
-            navigationBar.tintColor = UIColor.whiteColor()
+            navigationBar.isTranslucent = false
+            navigationBar.tintColor = UIColor.white
             navigationBar.barTintColor = UIColor(red: 38.0 / 255, green: 191.0 / 255, blue: 140.0 / 255, alpha: 1)
-            navigationBar.titleTextAttributes = NSDictionary(object: UIColor.whiteColor(), forKey: NSForegroundColorAttributeName) as? [String : AnyObject]
-            navigationBar.setBackgroundImage(UIImage(), forBarMetrics: UIBarMetrics.Default)
+            navigationBar.titleTextAttributes = NSDictionary(object: UIColor.white, forKey: NSForegroundColorAttributeName as NSCopying) as? [String : AnyObject]
+            navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
             navigationBar.shadowImage = UIImage()
         }
-        UIApplication.sharedApplication().statusBarStyle = UIStatusBarStyle.LightContent
+        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
     }
     
     // MARK: ACTabScrollViewDelegate
-    func tabScrollView(tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
         print(index)
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
     }
     
     // MARK: ACTabScrollViewDataSource
-    func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int {
+    func numberOfPagesInTabScrollView(_ tabScrollView: ACTabScrollView) -> Int {
         return NewsCategory.allValues().count
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         // create a label
         let label = UILabel()
-        label.text = String(NewsCategory.allValues()[index]).uppercaseString
+        label.text = String(describing: NewsCategory.allValues()[index]).uppercased()
         if #available(iOS 8.2, *) {
-            label.font = UIFont.systemFontOfSize(16, weight: UIFontWeightThin)
+            label.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightThin)
         } else {
-            label.font = UIFont.systemFontOfSize(16)
+            label.font = UIFont.systemFont(ofSize: 16)
         }
         label.textColor = UIColor(red: 77.0 / 255, green: 79.0 / 255, blue: 84.0 / 255, alpha: 1)
-        label.textAlignment = .Center
+        label.textAlignment = .center
         
         // if the size of your tab is not fixed, you can adjust the size by the following way.
         label.sizeToFit() // resize the label to the size of content
@@ -84,7 +84,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         return label
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
         return contentViews[index]
     }
 }

@@ -187,9 +187,11 @@
 					6DB0CD1F1B8462B90069AE39 = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = 8Q7M9GVALG;
+						LastSwiftMigration = 0800;
 					};
 					6DB0CD341B8462B90069AE39 = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0800;
 						TestTargetID = 6DB0CD1F1B8462B90069AE39;
 					};
 				};
@@ -381,6 +383,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
 				PRODUCT_NAME = ACTabScrollView;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -395,6 +398,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
 				PRODUCT_NAME = ACTabScrollView;
 				PROVISIONING_PROFILE = "";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -414,6 +418,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.azurechen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ACTabScrollView;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ACTabScrollView.app/ACTabScrollView";
 			};
 			name = Debug;
@@ -430,6 +435,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.azurechen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ACTabScrollView;
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ACTabScrollView.app/ACTabScrollView";
 			};
 			name = Release;

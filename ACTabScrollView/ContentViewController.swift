@@ -15,7 +15,7 @@ class ContentViewController: UIViewController, UITableViewDelegate, UITableViewD
     var category: NewsCategory? {
         didSet {
             for news in MockData.newsArray {
-                if (news.category == category || category == .All) {
+                if (news.category == category || category == .all) {
                     newsArray.append(news)
                 }
             }
@@ -32,46 +32,46 @@ class ContentViewController: UIViewController, UITableViewDelegate, UITableViewD
         tableView.dataSource = self
     }
     
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
     
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return newsArray.count
     }
     
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let news = newsArray[indexPath.row]
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let news = newsArray[(indexPath as NSIndexPath).row]
         
         // set the cell
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell") as! ContentTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as! ContentTableViewCell
         cell.thumbnailImageView.image = UIImage(named: "thumbnail-\(news.id)")
         cell.thumbnailImageView.layer.cornerRadius = 4
         cell.titleLabel.text = news.title
-        cell.categoryLabel.text = String(news.category)
-        cell.categoryView.layer.backgroundColor = UIColor.whiteColor().CGColor
+        cell.categoryLabel.text = String(describing: news.category)
+        cell.categoryView.layer.backgroundColor = UIColor.white.cgColor
         cell.categoryView.layer.cornerRadius = 4
         cell.categoryView.layer.borderWidth = 1
-        cell.categoryView.layer.borderColor = UIColor(red: 238.0 / 255, green: 238.0 / 255, blue: 238.0 / 255, alpha: 1.0).CGColor
+        cell.categoryView.layer.borderColor = UIColor(red: 238.0 / 255, green: 238.0 / 255, blue: 238.0 / 255, alpha: 1.0).cgColor
         
         return cell
     }
     
-    func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 48
     }
     
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = UIView()
         view.backgroundColor = UIColor(red: 61.0 / 255, green: 66.0 / 255, blue: 77.0 / 255, alpha: 1.0)
         
         let label = UILabel()
         label.text = "Today"
-        label.textColor = UIColor.whiteColor()
+        label.textColor = UIColor.white
         if #available(iOS 8.2, *) {
-            label.font = UIFont.systemFontOfSize(17, weight: UIFontWeightThin)
+            label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightThin)
         } else {
-            label.font = UIFont.systemFontOfSize(17)
+            label.font = UIFont.systemFont(ofSize: 17)
         }
         label.sizeToFit()
         label.frame.origin = CGPoint(x: 18, y: 13)
@@ -91,7 +91,7 @@ class ContentTableViewCell: UITableViewCell {
     @IBOutlet weak var categoryLabel: UILabel!
     
     override func awakeFromNib() {
-        self.selectionStyle = .None
+        self.selectionStyle = .none
     }
     
 }
