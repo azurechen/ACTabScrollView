@@ -25,29 +25,29 @@ class DemoViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     }
     
     // MARK: ACTabScrollViewDelegate
-    func tabScrollView(tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, didChangePageTo index: Int) {
         print(index)
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, didScrollPageTo index: Int) {
     }
     
     // MARK: ACTabScrollViewDataSource
-    func numberOfPagesInTabScrollView(tabScrollView: ACTabScrollView) -> Int {
+    func numberOfPagesInTabScrollView(_ tabScrollView: ACTabScrollView) -> Int {
         return 8
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, tabViewForPageAtIndex index: Int) -> UIView {
         let tabView = UIView()
         tabView.frame.size = CGSize(width: (index + 1) * 10, height: (index + 1) * 5)
         
         switch (index % 3) {
         case 0:
-            tabView.backgroundColor = UIColor.redColor()
+            tabView.backgroundColor = UIColor.red
         case 1:
-            tabView.backgroundColor = UIColor.greenColor()
+            tabView.backgroundColor = UIColor.green
         case 2:
-            tabView.backgroundColor = UIColor.blueColor()
+            tabView.backgroundColor = UIColor.blue
         default:
             break
         }
@@ -55,16 +55,16 @@ class DemoViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         return tabView
     }
     
-    func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
+    func tabScrollView(_ tabScrollView: ACTabScrollView, contentViewForPageAtIndex index: Int) -> UIView {
         let contentView = UIView()
         
         switch (index % 3) {
         case 0:
-            contentView.backgroundColor = UIColor.redColor()
+            contentView.backgroundColor = UIColor.red
         case 1:
-            contentView.backgroundColor = UIColor.greenColor()
+            contentView.backgroundColor = UIColor.green
         case 2:
-            contentView.backgroundColor = UIColor.blueColor()
+            contentView.backgroundColor = UIColor.blue
         default:
             break
         }
