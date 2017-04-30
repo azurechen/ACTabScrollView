@@ -3,6 +3,7 @@
 //  ACTabScrollView
 //
 //  Created by AzureChen on 2015/8/19.
+//  Edited by Thiha Aung on 2017/4/30.
 //  Copyright (c) 2015 AzureChen. All rights reserved.
 //
 
@@ -12,6 +13,9 @@
 //   3. Tabs in the bottom
 //   4. Bottom line or shadow
 //   5. Support Carthage
+
+//  ADDED:
+//   1. Set arrow item to up position
 
 import UIKit
 
@@ -24,13 +28,17 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     @IBInspectable open var tabSectionBackgroundColor: UIColor = UIColor.white
     @IBInspectable open var contentSectionBackgroundColor: UIColor = UIColor.white
     @IBInspectable open var tabGradient: Bool = true
-    @IBInspectable open var arrowIndicator: Bool = false
     @IBInspectable open var pagingEnabled: Bool = true {
         didSet {
             contentSectionScrollView.isPagingEnabled = pagingEnabled
         }
     }
     @IBInspectable open var cachedPageLimit: Int = 3
+    @IBInspectable open var arrowIndicator: Bool = false
+    @IBInspectable open var upsideArrowDirection : Bool = true
+    @IBInspectable open var arrowBackgroundColor: UIColor = UIColor.white
+    @IBInspectable open var arrowWidth : CGFloat = 12
+    @IBInspectable open var arrowHeight : CGFloat = 7
     
     open var delegate: ACTabScrollViewDelegate?
     open var dataSource: ACTabScrollViewDataSource?
@@ -91,7 +99,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         // init views
         tabSectionScrollView = UIScrollView()
         contentSectionScrollView = UIScrollView()
-        arrowView = ArrowView(frame: CGRect(x: 0, y: 0, width: 30, height: 10))
+        arrowView = ArrowView(frame: CGRect(x: 0, y: 0, width: arrowWidth, height: arrowHeight))
         
         self.addSubview(tabSectionScrollView)
         self.addSubview(contentSectionScrollView)
@@ -120,7 +128,8 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         // set custom attrs
         tabSectionScrollView.backgroundColor = self.tabSectionBackgroundColor
         contentSectionScrollView.backgroundColor = self.contentSectionBackgroundColor
-        arrowView.arrorBackgroundColor = self.tabSectionBackgroundColor
+        arrowView.arrorBackgroundColor = self.arrowBackgroundColor
+        arrowView.upsideArrowDirection = self.upsideArrowDirection
         arrowView.isHidden = !arrowIndicator
         
         // first time setup pages
@@ -173,7 +182,11 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         seperatorView.backgroundColor = textColor
         
         // arrow
-        arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
+        if upsideArrowDirection{
+            arrowView.frame.origin = CGPoint(x: (self.bounds.width - arrowView.bounds.width) / 2, y: tabSectionHeight - arrowView.bounds.height)
+        }else{
+            arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
+        }
         
         // add subviews
         self.addSubview(tabSectionLabel)
@@ -385,7 +398,13 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
             contentSectionScrollView.frame = CGRect(x: 0, y: tabSectionHeight, width: self.frame.size.width, height: contentSectionHeight)
             
             // reset the origin of arrow view
-            arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
+            
+            if upsideArrowDirection{
+                arrowView.frame.origin = CGPoint(x: (self.bounds.width - arrowView.bounds.width) / 2, y: tabSectionHeight - arrowView.bounds.height)
+            }else{
+                arrowView.frame.origin = CGPoint(x: (self.frame.width - arrowView.frame.width) / 2, y: tabSectionHeight)
+            }
+            
         }
     }
     
@@ -548,28 +567,42 @@ class ArrowView : UIView {
     
     var rect: CGRect!
     var arrorBackgroundColor: UIColor?
+    var upsideArrowDirection : Bool?
     
     var midX: CGFloat { return rect.midX }
     var midY: CGFloat { return rect.midY }
     var maxX: CGFloat { return rect.maxX }
     var maxY: CGFloat { return rect.maxY }
     
+    // Change the arrow direction to up
     override func draw(_ rect: CGRect) {
         self.rect = rect
         
-        let ctx = UIGraphicsGetCurrentContext()
+        guard let ctx = UIGraphicsGetCurrentContext() else { return }
         
-        ctx?.beginPath()
-        ctx?.move(to: CGPoint(x: 0, y: 0))
-        ctx?.addQuadCurve(to: CGPoint(x:maxX * 0.2 , y: maxY * 0.2), control: CGPoint(x: maxX * 0.12, y: 0))
-        ctx?.addLine(to: CGPoint(x: midX - maxX * 0.05, y: maxY * 0.9))
-        ctx?.addQuadCurve(to: CGPoint(x: midX + maxX * 0.05, y: maxY * 0.9), control: CGPoint(x: midX, y: maxY))
-        ctx?.addLine(to: CGPoint(x: maxX * 0.8, y: maxY * 0.2))
-        ctx?.addQuadCurve(to: CGPoint(x: maxX, y: 0), control: CGPoint(x: maxX * 0.88, y: 0))
-        ctx?.closePath()
-        
-        ctx?.setFillColor((arrorBackgroundColor?.cgColor)!)
-        ctx?.fillPath();
+        if upsideArrowDirection!{
+            ctx.beginPath()
+            ctx.move(to: CGPoint(x: 0, y: bounds.maxY))
+            ctx.addLine(to: CGPoint(x: bounds.midX, y: bounds.minY))
+            ctx.addLine(to: CGPoint(x: bounds.maxX, y: bounds.maxY))
+            ctx.addLine(to: CGPoint(x: 0, y: bounds.maxY))
+            ctx.closePath()
+            
+            ctx.setFillColor((arrorBackgroundColor?.cgColor)!)
+            ctx.fillPath()
+        }else{
+            ctx.beginPath()
+            ctx.move(to: CGPoint(x: 0, y: 0))
+            ctx.addQuadCurve(to: CGPoint(x:maxX * 0.2 , y: maxY * 0.2), control: CGPoint(x: maxX * 0.12, y: 0))
+            ctx.addLine(to: CGPoint(x: midX - maxX * 0.05, y: maxY * 0.9))
+            ctx.addQuadCurve(to: CGPoint(x: midX + maxX * 0.05, y: maxY * 0.9), control: CGPoint(x: midX, y: maxY))
+            ctx.addLine(to: CGPoint(x: maxX * 0.8, y: maxY * 0.2))
+            ctx.addQuadCurve(to: CGPoint(x: maxX, y: 0), control: CGPoint(x: maxX * 0.88, y: 0))
+            ctx.closePath()
+            
+            ctx.setFillColor((arrorBackgroundColor?.cgColor)!)
+            ctx.fillPath();
+        }
     }
     
 }
