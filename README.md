@@ -30,7 +30,7 @@ You can also use `changePageToIndex` method to scroll pages programmatically.
 Usage
 -----
 
-###Add an Object of `ACTabScrollView`
+### Add an Object of `ACTabScrollView`
 
 Drag a `UIView` object  onto the Interface Builder and set the `Class` to extends `ACTabScrollView ` in `XIB` or `Storyboard`.
 
@@ -44,7 +44,7 @@ And remember to declare the `IBOutlet`.
 @IBOutlet weak var tabScrollView: ACTabScrollView!
 ```
 
-###Set Properties
+### Set Properties
 
 All the following properties are `optional`. It provides more flexibility to customize. But it will be fine if you don't change any property.
 
@@ -66,7 +66,7 @@ override func viewDidLoad() {
 }
 ```
 
-###Delegate and DataSource
+### Delegate and DataSource
 
 Set `Delegate` and `DataSource` first in `viewDidLoad()`, the usage is similar to `UITableView`.
 
@@ -140,7 +140,7 @@ func tabScrollView(tabScrollView: ACTabScrollView, contentViewForPageAtIndex ind
 
 The usage tutorial is finished, you can see more details and example at `ACTabScrollView/NewsViewController.swift`
 
-###Using `ACTabScrollView` in `Objective-C` Project
+### Using `ACTabScrollView` in `Objective-C` Project
 
 It is very very easy if you use the newest version of Xcode.
 
@@ -180,7 +180,7 @@ Enjoy `ACTabScrollView` in your Objective-C project. 🎉
 How to Install
 --------------
 
-###CocoaPods
+### CocoaPods
 
 If you didn't use [CocoaPods](http://cocoapods.org) before, install it first.
 
@@ -201,7 +201,7 @@ Then, run this command. 🎉
 $ pod install
 ```
 
-###Manual
+### Manual
 
 Drag these two files into your project.
 
