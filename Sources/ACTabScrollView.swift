@@ -57,7 +57,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     fileprivate var prevPageIndex: Int?
     
     fileprivate var isWaitingForPageChangedCallback = false
-    fileprivate var pageChangedCallback: ((Void) -> Void)?
+    fileprivate var pageChangedCallback: (() -> Void)?
     
     // MARK: DataSource
     fileprivate var numberOfPages = 0
@@ -149,7 +149,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         tabSectionLabel.textColor = textColor
         tabSectionLabel.textAlignment = .center
         if #available(iOS 8.2, *) {
-            tabSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFontWeightHeavy)
+            tabSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFont.Weight.heavy)
         } else {
             tabSectionLabel.font = UIFont.systemFont(ofSize: 27)
         }
@@ -158,7 +158,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         contentSectionLabel.textColor = textColor
         contentSectionLabel.textAlignment = .center
         if #available(iOS 8.2, *) {
-            contentSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFontWeightHeavy)
+            contentSectionLabel.font = UIFont.systemFont(ofSize: 27, weight: UIFont.Weight.heavy)
         } else {
             contentSectionLabel.font = UIFont.systemFont(ofSize: 27)
         }
@@ -184,12 +184,12 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     }
     
     // MARK: - Tab Clicking Control
-    func tabViewDidClick(_ sensor: UITapGestureRecognizer) {
+    @objc func tabViewDidClick(_ sensor: UITapGestureRecognizer) {
         activedScrollView = tabSectionScrollView
         moveToIndex(sensor.view!.tag, animated: true)
     }
     
-    func tabSectionScrollViewDidClick(_ sensor: UITapGestureRecognizer) {
+    @objc func tabSectionScrollViewDidClick(_ sensor: UITapGestureRecognizer) {
         activedScrollView = tabSectionScrollView
         moveToIndex(pageIndex, animated: true)
     }
@@ -279,7 +279,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
         moveToIndex(index, animated: animated)
     }
     
-    open func changePageToIndex(_ index: Int, animated: Bool, completion: @escaping ((Void) -> Void)) {
+    open func changePageToIndex(_ index: Int, animated: Bool, completion: @escaping (() -> Void)) {
         isWaitingForPageChangedCallback = true
         pageChangedCallback = completion
         changePageToIndex(index, animated: animated)
