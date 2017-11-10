@@ -45,7 +45,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
             navigationBar.isTranslucent = false
             navigationBar.tintColor = UIColor.white
             navigationBar.barTintColor = UIColor(red: 38.0 / 255, green: 191.0 / 255, blue: 140.0 / 255, alpha: 1)
-            navigationBar.titleTextAttributes = NSDictionary(object: UIColor.white, forKey: NSForegroundColorAttributeName as NSCopying) as? [String : AnyObject]
+            navigationBar.titleTextAttributes = NSDictionary(object: UIColor.white, forKey: NSAttributedStringKey.foregroundColor as NSCopying) as? [NSAttributedStringKey : AnyObject]
             navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
             navigationBar.shadowImage = UIImage()
         }
@@ -70,7 +70,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
         let label = UILabel()
         label.text = String(describing: NewsCategory.allValues()[index]).uppercased()
         if #available(iOS 8.2, *) {
-            label.font = UIFont.systemFont(ofSize: 16, weight: UIFontWeightThin)
+            label.font = UIFont.systemFont(ofSize: 16, weight: UIFont.Weight.thin)
         } else {
             label.font = UIFont.systemFont(ofSize: 16)
         }

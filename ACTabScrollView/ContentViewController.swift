@@ -69,7 +69,7 @@ class ContentViewController: UIViewController, UITableViewDelegate, UITableViewD
         label.text = "Today"
         label.textColor = UIColor.white
         if #available(iOS 8.2, *) {
-            label.font = UIFont.systemFont(ofSize: 17, weight: UIFontWeightThin)
+            label.font = UIFont.systemFont(ofSize: 17, weight: UIFont.Weight.thin)
         } else {
             label.font = UIFont.systemFont(ofSize: 17)
         }
