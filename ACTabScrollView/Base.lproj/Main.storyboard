@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VUE-f8-3s2">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="VUE-f8-3s2">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -51,13 +50,13 @@
                                                     </variation>
                                                 </imageView>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nbr-9R-GKx">
-                                                    <rect key="frame" x="111" y="16" width="249" height="43"/>
+                                                    <rect key="frame" x="111" y="16" width="249" height="43.5"/>
                                                     <fontDescription key="fontDescription" type="system" weight="thin" pointSize="17"/>
                                                     <color key="textColor" red="0.29019607843137252" green="0.29803921568627451" blue="0.31764705882352939" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <view contentMode="scaleToFill" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="rtq-l3-kbv">
-                                                    <rect key="frame" x="111" y="63" width="79" height="26"/>
+                                                    <rect key="frame" x="111" y="63.5" width="79" height="26"/>
                                                     <subviews>
                                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" verticalCompressionResistancePriority="751" text="category" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YZq-CT-JLB">
                                                             <rect key="frame" x="8" y="4" width="63" height="18"/>
@@ -196,39 +195,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="I1x-oj-uf9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-253" y="254"/>
-        </scene>
-        <!--Demo View Controller-->
-        <scene sceneID="9CW-yv-7Bo">
-            <objects>
-                <viewController automaticallyAdjustsScrollViewInsets="NO" id="S0q-1n-yhF" customClass="DemoViewController" customModule="ACTabScrollView" customModuleProvider="target" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="OVf-3x-AtA"/>
-                        <viewControllerLayoutGuide type="bottom" id="14B-mi-1zy"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="hd5-6J-MDH">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FTT-i0-ccm" customClass="ACTabScrollView" customModule="ACTabScrollView" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </view>
-                        </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="14B-mi-1zy" firstAttribute="top" secondItem="FTT-i0-ccm" secondAttribute="bottom" id="1af-ao-NAb"/>
-                            <constraint firstItem="FTT-i0-ccm" firstAttribute="leading" secondItem="hd5-6J-MDH" secondAttribute="leading" id="5qU-Dp-HFu"/>
-                            <constraint firstItem="FTT-i0-ccm" firstAttribute="top" secondItem="hd5-6J-MDH" secondAttribute="top" id="7zJ-lL-bY8"/>
-                            <constraint firstAttribute="trailing" secondItem="FTT-i0-ccm" secondAttribute="trailing" id="OMz-vX-SfQ"/>
-                        </constraints>
-                    </view>
-                    <connections>
-                        <outlet property="tabScrollView" destination="FTT-i0-ccm" id="rzh-8z-zK3"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="feR-MX-GuE" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-253" y="-504"/>
         </scene>
     </scenes>
 </document>
