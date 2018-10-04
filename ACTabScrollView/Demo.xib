@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <viewController automaticallyAdjustsScrollViewInsets="NO" id="R7D-iA-2cK" customClass="DemoViewController" customModule="ACTabScrollView" customModuleProvider="target">
+            <layoutGuides>
+                <viewControllerLayoutGuide type="top" id="twm-cL-pwH"/>
+                <viewControllerLayoutGuide type="bottom" id="AKa-u5-A4T"/>
+            </layoutGuides>
+            <view key="view" contentMode="scaleToFill" id="Oec-dH-8gH">
+                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <subviews>
+                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U7M-Hu-21d" customClass="ACTabScrollView" customModule="ACTabScrollView" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                </subviews>
+                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                <constraints>
+                    <constraint firstItem="U7M-Hu-21d" firstAttribute="top" secondItem="Oec-dH-8gH" secondAttribute="top" id="G9l-M7-t69"/>
+                    <constraint firstAttribute="trailing" secondItem="U7M-Hu-21d" secondAttribute="trailing" id="NqK-9V-waZ"/>
+                    <constraint firstItem="AKa-u5-A4T" firstAttribute="top" secondItem="U7M-Hu-21d" secondAttribute="bottom" id="eAR-lQ-5lX"/>
+                    <constraint firstItem="U7M-Hu-21d" firstAttribute="leading" secondItem="Oec-dH-8gH" secondAttribute="leading" id="jmh-pz-buO"/>
+                </constraints>
+                <viewLayoutGuide key="safeArea" id="DCr-iW-Veu"/>
+            </view>
+            <connections>
+                <outlet property="tabScrollView" destination="U7M-Hu-21d" id="H9N-M3-8SK"/>
+            </connections>
+            <point key="canvasLocation" x="-253" y="-504"/>
+        </viewController>
+    </objects>
+</document>

@@ -14,6 +14,10 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
     
     var contentViews: [UIView] = []
     
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,7 +40,7 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
             let vc = storyboard.instantiateViewController(withIdentifier: "ContentViewController") as! ContentViewController
             vc.category = category
             
-            addChildViewController(vc) // don't forget, it's very important
+            addChild(vc) // don't forget, it's very important
             contentViews.append(vc.view)
         }
         
@@ -45,11 +49,11 @@ class NewsViewController: UIViewController, ACTabScrollViewDelegate, ACTabScroll
             navigationBar.isTranslucent = false
             navigationBar.tintColor = UIColor.white
             navigationBar.barTintColor = UIColor(red: 38.0 / 255, green: 191.0 / 255, blue: 140.0 / 255, alpha: 1)
-            navigationBar.titleTextAttributes = NSDictionary(object: UIColor.white, forKey: NSAttributedStringKey.foregroundColor as NSCopying) as? [NSAttributedStringKey : AnyObject]
+            navigationBar.titleTextAttributes = NSDictionary(object: UIColor.white, forKey: NSAttributedString.Key.foregroundColor as NSCopying) as? [NSAttributedString.Key : AnyObject]
             navigationBar.setBackgroundImage(UIImage(), for: UIBarMetrics.default)
             navigationBar.shadowImage = UIImage()
         }
-        UIApplication.shared.statusBarStyle = UIStatusBarStyle.lightContent
+        setNeedsStatusBarAppearanceUpdate()
     }
     
     // MARK: ACTabScrollViewDelegate
