@@ -201,6 +201,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -402,7 +403,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
 				PRODUCT_NAME = ACTabScrollView;
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
@@ -419,7 +420,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.azurechen.ACTabScrollView;
 				PRODUCT_NAME = ACTabScrollView;
 				PROVISIONING_PROFILE = "";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
@@ -439,7 +440,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.azurechen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ACTabScrollView;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ACTabScrollView.app/ACTabScrollView";
 			};
 			name = Debug;
@@ -456,7 +457,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "com.azurechen.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = ACTabScrollView;
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 5.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ACTabScrollView.app/ACTabScrollView";
 			};
 			name = Release;
