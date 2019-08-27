@@ -313,7 +313,10 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     fileprivate func currentPageIndex() -> Int {
         let width = self.frame.width
-        var currentPageIndex = Int((contentSectionScrollView.contentOffset.x + (0.5 * width)) / width)
+        var currentPageIndex = 0
+        if width != 0 {
+            currentPageIndex =   Int(( contentSectionScrollView.contentOffset.x + (0.5 * width)) / width)
+        }
         if (currentPageIndex < 0) {
             currentPageIndex = 0
         } else if (currentPageIndex >= self.numberOfPages) {
@@ -406,7 +409,7 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
                     
                     if let tab = self.cachedPageTabs[i] {
                         if (animated) {
-                            UIView.animate(withDuration: 0.5, delay: 0, options: UIViewAnimationOptions.allowUserInteraction, animations: {
+                            UIView.animate(withDuration: 0.5, delay: 0, options: UIView.AnimationOptions.allowUserInteraction, animations: {
                                 tab.alpha = alpha
                                 return
                             }, completion: nil)
@@ -500,7 +503,7 @@ public struct CacheQueue<Key: Hashable, Value> {
         }
         set {
             // key/value pair exists, delete it first
-            if let index = keys.index(of: key) {
+            if let index = keys.firstIndex(of: key) {
                 keys.remove(at: index)
             }
             // append key
@@ -513,7 +516,7 @@ public struct CacheQueue<Key: Hashable, Value> {
     }
     
     mutating func awake(_ key: Key) {
-        if let index = keys.index(of: key) {
+        if let index = keys.firstIndex(of: key) {
             keys.remove(at: index)
             keys.append(key)
         }
