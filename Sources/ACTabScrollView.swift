@@ -313,7 +313,10 @@ open class ACTabScrollView: UIView, UIScrollViewDelegate {
     
     fileprivate func currentPageIndex() -> Int {
         let width = self.frame.width
-        var currentPageIndex = Int((contentSectionScrollView.contentOffset.x + (0.5 * width)) / width)
+        var currentPageIndex = 0
+        if width != 0 {
+            currentPageIndex =   Int(( contentSectionScrollView.contentOffset.x + (0.5 * width)) / width)
+        }
         if (currentPageIndex < 0) {
             currentPageIndex = 0
         } else if (currentPageIndex >= self.numberOfPages) {
